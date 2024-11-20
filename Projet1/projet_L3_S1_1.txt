@@ -1,0 +1,79 @@
+1) Ecrire un programme Python qui permet de transcoder dans un document en français,
+encodé en UTF8, tous les caractères aphabétiques avec diacritiques (accents, cédille etc.)
+du français dans leur représentation LaTex:
+
+à \`a 
+ç \c{c}
+é \'e
+è \`e
+ê \^e
+ë \"e
+î \^i
+ô \^o
+ù \`u
+û \^u
+À \`A 
+Ç \c{C}
+É \'E
+È \`E
+Ê \^E
+Ë \"E
+Î \^I
+Ô \^O
+Ù \`U
+Û \^U
+œ \oe
+Œ \OE
+
+Les autres caratères resteront inchangés
+
+2) Ecrire un programme Python qui permet de découper un texte en français en mots, définis
+comme étant toute séquence de caractèress visibles comprise entre deux espaces, ou un espace
+et la fin ou le début du fichier. Les espaces en UTF8 sont les caractères suivants:
+
+SPACE = chr(int('0020', 16))
+NO_BREAK_SPACE = chr(int('00A0', 16))
+OGHAM_SPACE_MARK  = chr(int('1680', 16))
+MONGOLIAN_VOWEL_SEPARATOR  = chr(int('180E', 16))
+EN_QUAD  = chr(int('2000', 16))
+EM_QUAD  = chr(int('2001', 16))
+EN_SPACE  = chr(int('2002', 16))
+EM_SPACE  = chr(int('2003', 16))
+THREE_PER_EM_SPACE  = chr(int('2004', 16))
+FOUR_PER_EM_SPACE  = chr(int('2005', 16))
+SIX_PER_EM_SPACE  = chr(int('2006', 16))
+FIGURE_SPACE  = chr(int('2007', 16))
+PUNCTUATION_SPACE  = chr(int('2008', 16))
+THIN_SPACE  = chr(int('2009', 16))
+HAIR_SPACE  = chr(int('200A', 16))
+ZERO_WIDTH_SPACE  = chr(int('200B', 16))
+NARROW_NO_BREAK_SPACE  = chr(int('202F', 16))
+MEDIUM_MATHEMATICAL_SPACE  = chr(int('205F', 16))
+IDEOGRAPHIC_SPACE  = chr(int('3000', 16))
+ZERO_WIDTH_NO_BREAK_SPACE  = chr(int('FEFF', 16))
+#---line separators---
+LINE_FEED = chr(int('000A', 16))
+CARRIAGE_RETURN = chr(int('000D', 16))    
+INFORMATION_SEPARATOR_FOUR = chr(int('001C', 16))
+INFORMATION_SEPARATOR_THREE = chr(int('001D', 16))
+INFORMATION_SEPARATOR_TWO = chr(int('001E', 16))
+NEL_NEXT_LINE = chr(int('0085', 16))
+LINE_SEPARATOR = chr(int('2028', 16))
+PARAGRAPH_SEPARATOR = chr(int('2029', 16))
+
+Votre programme générera un flux de mots, un par ligne à partir du document original en français.
+
+3) Réaliser le même travail en utilisant le tokenizer de la bibliothèque NLTK:   https://www.nltk.org/howto/tokenize.html
+
+4) Utiliser le programme Python dynprog_align (disponible sur le site des cours en ligne
+à l'URL: https://perso.limsi.fr/pap/inalco/TNML3_2024_2025/dynprog_align.py),
+que vous modifierez au besoin, pour aligner les deux flux de tokens des questions 2) et 3).
+Les deux flux de token réalignés seront sauvegardés dans un fichier texte contenant
+deux colonnes de mots par ligne, une colonne pour chaque segmentation des question 2) et 3).
+Si des mots n'ont pas de corresponant dans l'autre flux de mots, un marqueur de position
+vide (par exemple "<EMPTY>" "sera associé au mot qui n'a pas de correspondant.
+
+5) Ecrire un programme Python qui calcule le pourcentage de mots qui ont été préservés dans les opérations
+de segmentation des question 2) et 3) à partir du résulat de la question 4
+
+
