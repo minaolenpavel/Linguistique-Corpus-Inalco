@@ -45,26 +45,26 @@ def charToHex(char:str) -> str:
     return hex(ord(char))
 
 def isSpace(char:str) -> bool:
-    for space in space_and_separator_list:
-        if charToHex(char) == space:
-            return True
-        else:
-            return False
+    return any(charToHex(char) == space for space in space_and_separator_list)
 
 def wordFormat(mot:str):
-    return "".join(ch for ch in mot if ch not in set(string.punctuation))
+    return "".join(ch for ch in mot if ch not in set(string.punctuation) - {"'"})
 
-text = []
-with open("samples/sample2.txt", encoding="UTF-8", mode="r") as file:
-    for line in file:
-        mot = []
-        for char in line:
-            if isSpace(char):
-                if wordFormat(mot):
-                    text.append(wordFormat(mot))
-                    mot = []
-            else:
-                mot.append(char)
+def tokenizedText():
+    text = []
+    with open("samples/sample2.txt", encoding="UTF-8", mode="r") as file:
+        for line in file:
+            mot = []
+            for char in line:
+                if isSpace(char):
+                    if wordFormat(mot):
+                        text.append(wordFormat(mot))
+                        mot = []
+                else:
+                    mot.append(char)
+    return text
 
-for i in text:
-    print(i)
+if __name__ == "__main__":
+    tokens = tokenizedText()
+    print(tokens)
+    
