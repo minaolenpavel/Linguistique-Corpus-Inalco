@@ -62,6 +62,7 @@ def tokenizedText():
                         mot = []
                 else:
                     mot.append(char)
+        file.close()
     return text
 
 if __name__ == "__main__":
