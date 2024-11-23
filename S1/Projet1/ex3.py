@@ -1,9 +1,12 @@
 import nltk
+import ex2
 
 text = []
-with open("Projet1\samples\sample2.txt", encoding="UTF-8", mode="r") as file:
+with open("samples/sample2.txt", encoding="UTF-8", mode="r") as file:
     for line in file:
-        text.append(line)
+        text.append(nltk.word_tokenize(line))
 
 for line in text:
-    print(nltk.word_tokenize(line))
+    for word in line:
+        if ex2.wordFormat(word):
+            print(ex2.wordFormat(word))

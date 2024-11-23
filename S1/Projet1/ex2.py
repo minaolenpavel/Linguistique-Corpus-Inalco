@@ -1,3 +1,5 @@
+import string
+
 SPACE = hex(int('0020', 16))
 NO_BREAK_SPACE = hex(int('00A0', 16))
 OGHAM_SPACE_MARK  = hex(int('1680', 16))
@@ -49,14 +51,18 @@ def isSpace(char:str) -> bool:
         else:
             return False
 
+def wordFormat(mot:str):
+    return "".join(ch for ch in mot if ch not in set(string.punctuation))
+
 text = []
-with open("Projet1\samples\sample2.txt", encoding="UTF-8", mode="r") as file:
+with open("samples/sample2.txt", encoding="UTF-8", mode="r") as file:
     for line in file:
         mot = []
         for char in line:
             if isSpace(char):
-                text.append("".join(mot))
-                mot = []
+                if wordFormat(mot):
+                    text.append(wordFormat(mot))
+                    mot = []
             else:
                 mot.append(char)
 
