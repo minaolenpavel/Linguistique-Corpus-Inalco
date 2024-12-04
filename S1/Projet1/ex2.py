@@ -52,7 +52,7 @@ def wordFormat(mot:str):
 
 def tokenizedText():
     text = []
-    with open("samples/sample2.txt", encoding="UTF-8", mode="r") as file:
+    with open("S1/Projet1/samples/sample2.txt", encoding="UTF-8", mode="r") as file:
         for line in file:
             mot = []
             for char in line:

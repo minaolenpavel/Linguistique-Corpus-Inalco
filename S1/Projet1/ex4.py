@@ -8,6 +8,7 @@ tokens2 = dynprog_align.text_to_indexed_obj_lst(" ".join(ex3.nltkTokens()))
 aligner = dynprog_align.dynprogalign(tokens1, tokens2)
 result = aligner.levenshtein_map()
 
+print(result)
 cleaned_result = []
 for i in result:
     for y in i:

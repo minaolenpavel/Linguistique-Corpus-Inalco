@@ -2,7 +2,7 @@ from char_extract import extract_char
 
 diacritique:dict = extract_char()
 text = []
-with open("samples/sample.txt", encoding="UTF-8", mode="r") as file:
+with open("S1/Projet1/samples/sample.txt", encoding="UTF-8", mode="r") as file:
     for line in file:
         text.append(line)
     file.close()
@@ -16,4 +16,3 @@ for i in text:
 
 print(modified_text)
 
-# Optionnellement on peut écrire la liste dans un fichier ?

@@ -6,9 +6,9 @@ def cleanApostrophes(tokens:list) -> list:
 
 def nltkTokens() -> list:
     text = []
-    with open("samples/sample2.txt", encoding="UTF-8", mode="r") as file:
+    with open("S1/Projet1/samples/sample2.txt", encoding="UTF-8", mode="r") as file:
         for line in file:
-            text.append(nltk.word_tokenize(line))
+            text.append(nltk.word_tokenize(line, language="french"))
         file.close()
     new_text = []
     for line in text:
