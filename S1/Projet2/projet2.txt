@@ -1,0 +1,58 @@
+Devoir L3-S1-2
+Date de rendu : 17 janvier 2025
+Mode de rendu : dossier électronique
+Livrables : programmes Pyhton, corpus étiqueté et un petit rapport
+décrivant les problèmes rencontrés et solutions mises
+en oeuvre pour les résoudre.
+
+Objectif: Réaliser une expérimentation d'étiquetage morpho-syntaxique en
+français sur le texte de la
+déclaration des droits de l'homme et du citoyen de 1789, qui peut être
+téléchargée depuis le site de l'ABU~:
+http://abu.cnam.fr/cgi-bin/donner_abu?ddhc3
+
+A) Vous étiqueterez le texte de la déclaration des droits de l'homme
+avec l'étiqueteur morpho-syntaxique pour le français
+développé par l'Université de Stanford, que nous avons vu lors du cours
+9 du 27/11/2024. A défaut, si vous n'êtes pas
+arrivé à installer cet outils d'étiquetage, vous pourrez utiliser un
+autre outil en fonction de ceux à votre disposition
+(par ex. un étiqueteur de la bôite à outil NLTK, ou bien de la boîte à
+outil Spacy etc.).
+Nous appellerons le corpus ainsi étiqueté le corpus DDHC_A.
+
+B) Vous écrirez un script Python qui réécrit les étiquettes
+morpho-syntaxiques du format de l'étiqueteur de Stanford
+présentes dans le corpus DDHC_A vers le format d'étiquetage défini dans
+le guide d'annotation GRACE vu en cours,
+pour produire un nouveau corpus que nous appellerons DDHC_B.
+Dans une premiere version, vous pouvez vous contenter de ne traduire que
+la catégorie principale (N, V, etc.),
+puis une fois que le programme fonctionne, si vous avez le temps essayez
+d'ajouter la sous-catégorie (Nc, Np etc.)
+et les traits restants (Ncms, Ncfp etc.).
+
+C) Vous relirez et au besoin corrigerez à la main avec un éditeur de
+texte les annotations du corpus DDHC_B
+afin de produire une nouvelle version du corpus que nous appelerons
+DDHC_REF. Commencez par quelques phrases,
+puis en fonction du temps que vous aurez essayez de relire le corpus
+entier, si cela est possible.
+
+D) Vous écrirez un script Python qui calcule la performance d'étiquetage
+de l'étiqueteur de Stanford (ou
+d'un autre si vous avez utilisé un autre outil) avec la mesure de
+précision vue en cours, en comparant
+les annotations du corpus DDHC_B et avec celles du corpus DDHC_REF.
+Commentez le résultat de la mesure
+en analysant les erreur comises par l'outil de Stanford, s'il y en a.
+
+En fonction du temps et de vos compétences en informatique ou
+linguistique, les quatres questions peuvent être traitées
+uniquement au niveau de la catégorie morphosyntaxique principale (N, V,
+etc) ou bien au niveau le plus fin défini par
+le guide d'annotation GRACE.
+
+Vous recevrez par courrier électronique les informations pour téléverser
+votre dossier électronique sur un
+site d'archive en ligne où vous aurez un repertoire qui vous sera alloué.
