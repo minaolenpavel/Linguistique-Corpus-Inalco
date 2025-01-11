@@ -1,3 +1,4 @@
+
 GRACE = {"NOUN" : "N", 
         "VERB" : "V",
         "AUX" : "V",
@@ -11,17 +12,117 @@ GRACE = {"NOUN" : "N",
         "PUNCT" : "F",
         "NUM" : "NUM" # Marqué en numéro pour la traduction de l'annotation, va être plus tard formalisée précisement 
         }
-# Liste les terminaisons des participes passé (ou au minimum des plus courants)
-TERM_PARTICIPE = ("é", "ée", "és", "ées", "t", "te", "ts", "tes", "i", "ie", "is", "ies", "s", "se", "ses", "u", "ue", "us", "ues")
+# Liste des terminaisons les plus régulières
+TERM_PARTICIPE_PASSE = ("é", "ée", "és", "ées", "t", "te", "ts", "tes", "i", "ie", "is", "ies", "s", "se", "ses", "u", "ue", "us", "ues")
+TERM_PARTICIPE_PRESENT = "ant"
+TERM_INF = ("ir", "er", "re", "oir", "ire")
+TERM_SUBJ = ("isse", "isses", "issions", "issiez", "issent", "e", "es", "ions", "iez", "ent")
+TERM_CONDITIONNEL_PRESENT = ("erais", "erait", "erions", "eriez", "eraient", "irais", "irait", "irios", "iriez", "iraient", "rais", "rait", "rios", "riez", "raient")
+TERM_FUTUR_S = ("rai", "ras", "ra", "rons", "rez", "ront")
+AUXILIAIRES = ("être", "avoir", "suis", "es", "est", "sommes", "êtes", "sont",  "été", "étais", "étais", "était", "étions", "étiez", "étaient","serai", "seras", "sera", "serons", "serez", "seront",  "serais", "serais", "serait", "serions", "seriez", "seraient",  "sois", "sois", "soit", "soyons", "soyez", "soient", "ai", "as", "a", "avons", "avez", "ont", "eu", "avais", "avais", "avait", "avions", "aviez", "avaient", "aurai", "auras", "aura", "aurons", "aurez", "auront",  "aurais", "aurais", "aurait", "avions", "aviez", "auraient", "aie", "aies", "ait", "ayons", "ayez", "aient", "n'est", "n'ai", "n'as", "n'a", "n'avons", "n'avez", "n'ont", "n'étais", "n'était", "n'étions", "n'étiez", "n'étaient", "n'aurai", "n'auras", "n'aura", "n'aurons", "n'aurez", "n'auront", "n'aurais", "n'aurais", "n'aurait", "n'avions", "n'aviez", "n'auraient", "n'aie", "n'aies", "n'ait", "n'ayons", "n'ayez", "n'aient")
+TERM_1_PERSON_PLURAL = ("ons", "sommes")
+TERM_2_PERSON_PLURAL = ("ez", "êtes")
+TERM_3_PERSON_PLURAL = ("ent", "ont")
+
+
+
+# FUNCTION FOR DEBUG ONLY
+def print_context(index:int):
+    word_before = corpus_grace[index-1][0]
+    word_after = corpus_grace[index+1][0]
+    word = corpus_grace[index]
+    print(f"Index: {index}")
+    print(f"Index -1: {index-1}")
+    print(f"Index +1: {index+1}")
+    print(f"Word Before: '{word_before}'")
+    print(f"Current Word: '{word}'")
+    print(f"Word after : {word_after}")
+    print(f"Corpus Slice: {corpus_grace[index-2:index+2]}") 
+    print("\n")
+
 
 def verb(word:str, index:int):
     pattern = "V"
-    # Analyse si le nom suivant dans le corpus est classé comme un participe, si oui, alors le string "word" est considéré comme un verbe auxiliaire 
-    # Possibilité de noter tous les index et les retenir comme des participes
-    if corpus_grace[index+1][1] == "V":
-        if corpus_grace[index+1][0].endswith(TERM_PARTICIPE):        
-            pattern += "a"
-        
+    word_before = corpus_grace[index-1][0]
+    word_after = corpus_grace[index+1][0]
+    #print_context(index)
+    # Type
+    if word in AUXILIAIRES:
+        if corpus_grace[index+1][1] == "V" or corpus_grace[index+2][1] == "V":
+            if word_after.endswith(TERM_PARTICIPE_PASSE) or corpus_grace[index+2][0].endswith(TERM_PARTICIPE_PASSE): 
+                pattern += "a"
+        else:
+            pattern += "m"
+    else:
+        pattern += "m"
+
+    # Mood
+    # Infinitif
+    if word.endswith(TERM_INF):
+        pattern += "n"
+    # Subjonctif
+    # Regarde si la form conjuguée a un des terminaisons du subjonctif, si oui, on regarde si le mot qui précède est "qu'elle" ou "qu'il"
+    elif word.endswith(TERM_SUBJ) and (word_before == "qu'elle" or word_before == "qu'il"):
+        pattern += "s"
+    # Participe
+    elif word.endswith(TERM_PARTICIPE_PRESENT):
+        pattern+= "p"
+    elif word.endswith(TERM_PARTICIPE_PASSE) and (("Va" in corpus_grace[index-1][1] or "Va" in corpus_grace[index-2][1]) or word_after == "par"): 
+        pattern += "p"
+    # Conditionnel 
+    elif word.endswith(TERM_CONDITIONNEL_PRESENT):
+        pattern += "c"
+    # Spécifique pour la forme conjuguée "a" du verbe avoir qui est récurrente
+    elif word == "a":
+        pattern += "i"
+    else:
+        pattern += "-"
+
+    # Tense
+    if pattern[-1] == "p" and word.endswith(TERM_PARTICIPE_PRESENT):
+        pattern += "p"
+    elif pattern[-1] == "p" and word.endswith(TERM_PARTICIPE_PASSE):
+        pattern += "s"
+    elif word.endswith(TERM_FUTUR_S):
+        if pattern[-1] == "-":
+            pattern = pattern[:-1]
+            pattern += "if"
+        else:
+            pattern+="f"
+    else:
+        pattern+="-"
+    
+    # Person
+    if word.endswith(TERM_1_PERSON_PLURAL):
+        pattern+="1"
+    elif word.endswith(TERM_2_PERSON_PLURAL):
+        pattern+="2"
+    elif word.endswith(TERM_3_PERSON_PLURAL):
+        pattern+="3"
+    else:
+        pattern+="-"
+
+    # Number 
+    if word.endswith(TERM_1_PERSON_PLURAL) or word.endswith(TERM_2_PERSON_PLURAL) or word.endswith(TERM_3_PERSON_PLURAL):
+        pattern+="p"
+    elif pattern[2] == "p":
+        if word.endswith("s"):
+            pattern+="p"
+        else:
+            pattern+="s"
+    else:
+        pattern+="-"
+
+    # Gender
+    if pattern[2] == "p":
+        if word.endswith("e") or word.endswith("es"):
+            pattern+="f"
+        else:
+            pattern+="m"
+    else:
+        pattern+="-"
+    return pattern
+
 
 corpus = []
 with open("S1/Projet2/DDHC_A.txt", "r", encoding='utf-8') as file:
@@ -33,17 +134,23 @@ with open("S1/Projet2/DDHC_A.txt", "r", encoding='utf-8') as file:
 
 corpus_grace = []
 for i in corpus:
-    for keys, value in GRACE.items():
-        if i[1] == keys:
-            if i[0] == "l'instant":
-                corpus_grace.append((i[0], "Ncms"))
-            else:
-                corpus_grace.append((i[0], value))
+    if i[1] in GRACE:
+        if i[0] == "l'instant" or i[0] == "l'ordre":
+            corpus_grace.append(list((i[0], "Ncms")))
+        elif i[0] == "n'est":
+            corpus_grace.append(list((i[0], "V")))
+        else:
+            corpus_grace.append(list((i[0], GRACE[i[1]])))
+    else:
+        corpus_grace.append(list((i[0], i[1])))
+
 
 
 for i, item in enumerate(corpus_grace):
     if item[1] == "V":
-        verb(item[0], i)
+        corpus_grace[i] = (item[0], verb(item[0], i))
+        print(item[0], verb(item[0], i))
+
 
 #with open("S1/Projet2/DDHC_B.txt", "w", encoding='utf-8') as file:
 #    for i in corpus_grace:

@@ -6,3 +6,5 @@ certaines catégories grammaticales plus simples comme les déterminant se conte
 les verbes conjugués aux personnes du pluriels ont des terminaisons spécifiques : -ons, -ez, -ent.
 
 les participes sont des verbes qui finissent en é/u/i
+
+identification d'un "que" et similaire pour le subjonctif
