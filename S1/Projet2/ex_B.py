@@ -10,9 +10,10 @@ GRACE = {"NOUN" : "N",
         "CCONJ" : "Cc",
         "UH" : "I", # Selon la documentation du tagger (https://aclanthology.org/J93-2004.pdf), l'interjection est UH, je l'ai ajouté tout en sachant qu'il n'y en a pas dans la DDHC. 
         "PUNCT" : "F",
-        "NUM" : "NUM" # Marqué en numéro pour la traduction de l'annotation, va être plus tard formalisée précisement 
+        "NUM" : "NUM", # Marqué en numéro pour la traduction de l'annotation, va être plus tard formalisée précisement 
+        "PROPN" : "PROPN" # Marqué en nom propre pour la traduction de l'annotation, va être plus tard formalisée précisement 
         }
-# Liste des terminaisons les plus régulières
+# Resources verbs
 TERM_PARTICIPE_PASSE = ("é", "ée", "és", "ées", "t", "te", "ts", "tes", "i", "ie", "is", "ies", "s", "se", "ses", "u", "ue", "us", "ues")
 TERM_PARTICIPE_PRESENT = "ant"
 TERM_INF = ("ir", "er", "re", "oir", "ire")
@@ -23,6 +24,19 @@ AUXILIAIRES = ("être", "avoir", "suis", "es", "est", "sommes", "êtes", "sont",
 TERM_1_PERSON_PLURAL = ("ons", "sommes")
 TERM_2_PERSON_PLURAL = ("ez", "êtes")
 TERM_3_PERSON_PLURAL = ("ent", "ont")
+# Resources nouns
+TERM_MASC = ('oir', 'age', 'gramme', 'scope', 'drome', 'er', 'phone', 'mètre', 'ment', 'isme', 'cide')
+TERM_FEM = ('manie', 'nomie', 'ine', 'erie', 'ssion', 'ure', 'ite', 'esse', 'logie', 'thérapie', 'tion', 'phobie', 'sion', 'ette', 'ie', 'té', 'ée', 'ence', 'ance')
+
+# Resources pronouns 
+PRO_PERS = ('je','nous', 'tu','vous', 'il', 'elle', 'ils', 'elles')
+PRO_DEM = ('celui', 'celle', 'ceux', 'celles', 'celui-ci', 'celle-ci', 'ceux-ci', 'celles-ci', 'celui-là', 'celle-là', 'ceux-là', 'celles-là')
+PRO_IND = ('certain', 'chaque', 'aucun', 'quelques', 'tout', 'tous', 'plusieurs')
+PRO_POS = ('le mien',  'le nôtre', 'le tien', 'le vôtre','le sien', 'le leur')
+PRO_INT = ('lequel', 'laquelle', 'lesquels', 'lesquelles')
+PRO_REL = ('qui', 'que', 'dont', 'lequel', 'laquelle', 'lesquels', 'lesquelles')
+PRO_REF = ('se', 'soi')
+PRO_CAR = ('un', 'deux', 'trois', 'quatre', 'cinq', 'six', 'sept', 'huit', 'neuf', 'dix')
 
 
 
@@ -41,11 +55,11 @@ def print_context(index:int):
     print("\n")
 
 
-def verb(word:str, index:int):
+def verb(word:str, index:int) -> str:
     pattern = "V"
     word_before = corpus_grace[index-1][0]
     word_after = corpus_grace[index+1][0]
-    #print_context(index)
+
     # Type
     if word in AUXILIAIRES:
         if corpus_grace[index+1][1] == "V" or corpus_grace[index+2][1] == "V":
@@ -123,6 +137,73 @@ def verb(word:str, index:int):
         pattern+="-"
     return pattern
 
+def noun(word:str, index:int, init_pattern:str) -> str:
+    pattern = "N"
+
+    # Type
+    if init_pattern == "NUM":
+        pattern += "k"
+    elif init_pattern == "PROPN":
+        pattern+="p"
+    else:
+        pattern += "c" 
+    # Gender
+    if word.endswith(TERM_MASC):
+        pattern+="m"
+    elif word.endswith(TERM_FEM):
+        pattern+="f"
+    else:
+        pattern+="-"
+    
+
+    return pattern
+
+def pronoun(word:str, index:int) -> str:
+    pattern = "P"
+    ref_word = word.lower()
+    
+    # Type
+    if ref_word in PRO_PERS:
+        pattern+="p"
+    elif ref_word in PRO_DEM:
+        pattern+="d"
+    elif ref_word in PRO_IND:
+        pattern+="i"
+    elif ref_word in PRO_POS:
+        pattern+="s"
+    elif ref_word in PRO_INT:
+        pattern+="t"
+    elif ref_word in PRO_REL:
+        pattern+="r"
+    elif ref_word in PRO_REF:
+        pattern+="x"
+    elif ref_word in PRO_CAR:
+        pattern+="k"
+    else:
+        pattern+="-"
+
+    # Person
+    if pattern[1] == "p":
+        if ref_word in PRO_PERS[0:1]:
+            pattern+="1"
+        elif ref_word in PRO_PERS[2:3]:
+            pattern+="2"
+        else:
+            pattern+="3"
+    elif pattern[1] == "s":
+        if ref_word in PRO_POS[0:1]:
+            pattern+="1"
+        elif ref_word in PRO_POS[2:3]:
+            pattern+="2"
+        else:
+            pattern+="3"
+    else:
+        pattern+="-"
+
+    # Gender
+
+    return pattern
+
 
 corpus = []
 with open("S1/Projet2/DDHC_A.txt", "r", encoding='utf-8') as file:
@@ -149,7 +230,13 @@ for i in corpus:
 for i, item in enumerate(corpus_grace):
     if item[1] == "V":
         corpus_grace[i] = (item[0], verb(item[0], i))
-        print(item[0], verb(item[0], i))
+        #print(item[0], verb(item[0], i))
+    if item[1] == "P":
+        corpus_grace[i] = (item[0], pronoun(item[0], i))
+        print(item[0], pronoun(item[0], i))
+    elif item[1] == "N" or item[1] == "NUM" or item[1] == "PROPN":
+        corpus_grace[i] = (item[0], noun(item[0], i, item[1]))
+        #print(item[0], noun(item[0], i, item[1]))
 
 
 #with open("S1/Projet2/DDHC_B.txt", "w", encoding='utf-8') as file:
