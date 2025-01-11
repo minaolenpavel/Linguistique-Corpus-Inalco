@@ -4,6 +4,7 @@ GRACE = {"NOUN" : "N",
         "AUX" : "V",
         "PRON": "P", 
         "ADJ" : "A",
+        "ADP" : "S", # ADP = Adposition, parapluie pour post/pré.positions
         "DET":"D",
         "ADV" : "R",
         "SCONJ" : "Cs",
@@ -42,15 +43,17 @@ PRO_REF = ('se', 'soi')
 PRO_CAR = ('un', 'deux', 'trois', 'quatre', 'cinq', 'six', 'sept', 'huit', 'neuf', 'dix')
 
 # Resources determiners
-DET_ART_DEF = ('le', 'la', 'les', 'l')
-DET_ART_IND = ('un', 'une', 'des')
+DET_ART_DEF = ('le', 'la', 'les', "l'", "aux")
+DET_ART_IND = ('un', 'une', 'des', 'de', 'du')
 DET_DEM = ('ce', 'cet', 'cette', 'ces')
 DET_POS = ('mon', 'ma', 'mes', 'ton', 'ta', 'tes', 'son', 'sa', 'ses', 'notre', 'nos', 'votre', 'vos', 'leur', 'leurs')
-DET_IND = ('certains', 'certaines', 'quelques', 'tout', 'toutes', 'chaque', 'aucun', 'aucune')
+DET_IND = ('certains', 'certaines', 'quelques', 'tout', 'toutes', 'chaque', 'aucun', 'aucune', 'certaine', 'certain', 'tous', 'toute')
 DET_INT_EXC = ('quel', 'quelle', 'quels', 'quelles')
 DET_REL = ('lequel', 'laquelle', 'lesquels', 'lesquelles')
 
-
+# Resources adverbs 
+ADV_INTER_EXCL = ("pourquoi", "comment", "combien", "où", "quand", "que", "quoi", "comme", "quel", "quelle", "si")
+ADV_PARTIC = ("ne", "n'" "pas", "plus", "jamais", "rien", "guère", "aucun", "personne", "nulle part", "non", "afin")
 
 
 # FUNCTION FOR DEBUG ONLY
@@ -272,6 +275,91 @@ def determiners(word:str, index:int) -> str:
     else:
         pattern+="-"
 
+    # Person
+    if pattern[1] == "s":
+        if ref_word.startswith("m") or ref_word.startswith("n"):
+            pattern+="1"
+        elif ref_word.startswith("t") or ref_word.startswith("v"):
+            pattern+="2"
+        elif ref_word.startswith("s") or ref_word.startswith("l"):
+            pattern+="3"
+    else:
+        pattern+="-"
+
+    # Gender
+    if pattern[1] == "a":
+        if ref_word == "la" or ref_word == "une":
+            pattern+="f"
+        elif ref_word == "le" or ref_word == "un":
+            pattern+="m"
+        else:
+            pattern+="-"
+    elif pattern[1] == "d":
+        if ref_word == "cette":
+            pattern+="f"
+        elif ref_word == "ces":
+            pattern+="-"
+        else:
+            pattern+="m"
+    elif pattern[1] == "s":
+        if "a" in ref_word:
+            pattern+="f"
+        elif "s" not in ref_word:
+            pattern+="m"
+    elif pattern[1] == "i":
+        if ref_word.endswith(("es", "e")):
+            pattern+="f"
+        else:
+            pattern+="m"
+    elif pattern[1] == "t" or pattern[1] == "r":
+        if ref_word.endswith(("elle", "elles")):
+            pattern+="f"
+        else:
+            pattern+="m"
+    else:
+        pattern+="-"
+
+    # Number 
+    if ref_word.endswith("s"):
+        pattern+="p"
+    else:
+        pattern+="s"
+
+    # Nature
+    if ref_word in DET_ART_DEF:
+        pattern+="d"
+    elif ref_word in DET_ART_IND:
+        pattern+="i"
+    else:
+        pattern+="-"
+
+    return pattern
+
+def adverbs(word:str, index:int) -> str:
+    pattern = "R"
+    ref_word = word.lower()
+
+    # Type 
+    if ref_word in ADV_INTER_EXCL:
+        pattern+="x"
+    elif ref_word in ADV_PARTIC:
+        pattern+="p"
+    else:
+        pattern+="g"
+
+    # Degree
+    # Ajouter le critère du participe/adjectif qui suit pour le comparatif
+    # Eventuellement le fait qu'il soit suivi de "de" ou "que"
+    if corpus_grace[index+1][1].startswith(("Vmp", "A")):
+        pattern+="c"
+    elif ref_word in ADV_PARTIC[0:10]:
+        pattern+="n"
+    else:
+        pattern+="p"
+
+    return pattern
+
+
 
 
 corpus = []
@@ -297,10 +385,19 @@ for i, item in enumerate(corpus_grace):
         #print(item[0], verb(item[0], i))
     elif item[1] == "P":
         corpus_grace[i] = (item[0], pronoun(item[0], i))
-        print(item[0], pronoun(item[0], i))
+        #print(item[0], pronoun(item[0], i))
     elif item[1] == "N" or item[1] == "NUM" or item[1] == "PROPN":
         corpus_grace[i] = (item[0], noun(item[0], i, item[1]))
         #print(item[0], noun(item[0], i, item[1]))
+    elif item[1] == "D":
+        corpus_grace[i] = (item[0], determiners(item[0], i))
+        #print(item[0], determiners(item[0], i))
+    elif item[1] == "R":
+        corpus_grace[i] = (item[0], adverbs(item[0], i))
+        #print(item[0], adverbs(item[0], i))
+    elif item[1] == "R":
+        corpus_grace[i] = (item[0], adverbs(item[0], i))
+        print(item[0], adverbs(item[0], i))
 
 
 with open("S1/Projet2/DDHC_B.txt", "w", encoding='utf-8') as file:
