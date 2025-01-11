@@ -24,19 +24,32 @@ AUXILIAIRES = ("être", "avoir", "suis", "es", "est", "sommes", "êtes", "sont",
 TERM_1_PERSON_PLURAL = ("ons", "sommes")
 TERM_2_PERSON_PLURAL = ("ez", "êtes")
 TERM_3_PERSON_PLURAL = ("ent", "ont")
+
 # Resources nouns
 TERM_MASC = ('oir', 'age', 'gramme', 'scope', 'drome', 'er', 'phone', 'mètre', 'ment', 'isme', 'cide')
 TERM_FEM = ('manie', 'nomie', 'ine', 'erie', 'ssion', 'ure', 'ite', 'esse', 'logie', 'thérapie', 'tion', 'phobie', 'sion', 'ette', 'ie', 'té', 'ée', 'ence', 'ance')
 
 # Resources pronouns 
-PRO_PERS = ('je','nous', 'tu','vous', 'il', 'elle', 'ils', 'elles')
+PRO_PERS_SUJ = ('je','nous', 'tu','vous', 'il', 'elle', 'ils', 'elles')
+PRO_PERS_COD = ('me', 'nous', 'te','vous', 'le', 'la', "l'", 'les', 'en')
+PRO_PERS_COI = ('me', 'nous', 'te', 'vous', 'lui', 'leur', 'y')
 PRO_DEM = ('celui', 'celle', 'ceux', 'celles', 'celui-ci', 'celle-ci', 'ceux-ci', 'celles-ci', 'celui-là', 'celle-là', 'ceux-là', 'celles-là')
-PRO_IND = ('certain', 'chaque', 'aucun', 'quelques', 'tout', 'tous', 'plusieurs')
-PRO_POS = ('le mien',  'le nôtre', 'le tien', 'le vôtre','le sien', 'le leur')
+PRO_IND = ('certain', 'chaque', 'aucun', 'quelques', 'tout', 'tous', 'plusieurs', 'nul')
+PRO_POS = ('le mien',  'le nôtre', 'le tien', 'le vôtre', 'le sien', 'le leur', 'les miens',  'les nôtres', 'les tiens', 'les vôtres','les siens', 'les leurs')
 PRO_INT = ('lequel', 'laquelle', 'lesquels', 'lesquelles')
-PRO_REL = ('qui', 'que', 'dont', 'lequel', 'laquelle', 'lesquels', 'lesquelles')
+PRO_REL = ("qu'", 'qui', 'que', 'dont', 'lequel', 'laquelle', 'lesquels', 'lesquelles')
 PRO_REF = ('se', 'soi')
 PRO_CAR = ('un', 'deux', 'trois', 'quatre', 'cinq', 'six', 'sept', 'huit', 'neuf', 'dix')
+
+# Resources determiners
+DET_ART_DEF = ('le', 'la', 'les', 'l')
+DET_ART_IND = ('un', 'une', 'des')
+DET_DEM = ('ce', 'cet', 'cette', 'ces')
+DET_POS = ('mon', 'ma', 'mes', 'ton', 'ta', 'tes', 'son', 'sa', 'ses', 'notre', 'nos', 'votre', 'vos', 'leur', 'leurs')
+DET_IND = ('certains', 'certaines', 'quelques', 'tout', 'toutes', 'chaque', 'aucun', 'aucune')
+DET_INT_EXC = ('quel', 'quelle', 'quels', 'quelles')
+DET_REL = ('lequel', 'laquelle', 'lesquels', 'lesquelles')
+
 
 
 
@@ -161,10 +174,14 @@ def noun(word:str, index:int, init_pattern:str) -> str:
 def pronoun(word:str, index:int) -> str:
     pattern = "P"
     ref_word = word.lower()
+
     
     # Type
-    if ref_word in PRO_PERS:
-        pattern+="p"
+    if ref_word in PRO_PERS_SUJ or ref_word in PRO_PERS_COD or ref_word in PRO_PERS_COI :
+        if corpus_grace[index+1][1] == "V":
+            pattern+="p"
+        else:
+            pattern+="s"
     elif ref_word in PRO_DEM:
         pattern+="d"
     elif ref_word in PRO_IND:
@@ -184,9 +201,9 @@ def pronoun(word:str, index:int) -> str:
 
     # Person
     if pattern[1] == "p":
-        if ref_word in PRO_PERS[0:1]:
+        if ref_word in PRO_PERS_SUJ[0:1] or ref_word in PRO_PERS_COD[0:1] or ref_word in PRO_PERS_COI[0:1]:
             pattern+="1"
-        elif ref_word in PRO_PERS[2:3]:
+        elif ref_word in PRO_PERS_SUJ[2:3] or ref_word in PRO_PERS_COD[2:3] or ref_word in PRO_PERS_COI[2:3]:
             pattern+="2"
         else:
             pattern+="3"
@@ -201,8 +218,60 @@ def pronoun(word:str, index:int) -> str:
         pattern+="-"
 
     # Gender
+    if "elle" in ref_word:
+        pattern+="f"
+    else:
+        pattern+="m"
+    
+    # Number
+    if "s" in ref_word or "x" in ref_word:
+        pattern+="p"
+    else:
+        pattern+="s"
+    
+    # Case
+    if pattern[1] == "p":
+        if ref_word in PRO_PERS_SUJ:
+            pattern+="n"
+        elif ref_word in PRO_PERS_COD:
+            pattern+="a"
+        elif ref_word in PRO_PERS_COI:
+            pattern+="d"
+    else:
+        pattern+="-"
+    
+    # Possessor
+    if pattern[1] == "s":
+        if "ô" in ref_word or "leur" in ref_word:
+            pattern+="p"
+        else:
+            pattern+="s"
+    else:
+        pattern+="-"
+
 
     return pattern
+
+def determiners(word:str, index:int) -> str:
+    pattern ="D"
+    ref_word = word.lower()
+
+    # Type
+    if ref_word in DET_ART_DEF or ref_word in DET_ART_IND:
+        pattern+="a"
+    elif ref_word in DET_DEM:
+        pattern+="d"
+    elif ref_word in DET_POS:
+        pattern+="s"
+    elif ref_word in DET_IND:
+        pattern+="i"
+    elif ref_word in DET_INT_EXC:
+        pattern+="t"
+    elif ref_word in DET_REL:
+        pattern+="r"
+    else:
+        pattern+="-"
+
 
 
 corpus = []
@@ -216,12 +285,7 @@ with open("S1/Projet2/DDHC_A.txt", "r", encoding='utf-8') as file:
 corpus_grace = []
 for i in corpus:
     if i[1] in GRACE:
-        if i[0] == "l'instant" or i[0] == "l'ordre":
-            corpus_grace.append(list((i[0], "Ncms")))
-        elif i[0] == "n'est":
-            corpus_grace.append(list((i[0], "V")))
-        else:
-            corpus_grace.append(list((i[0], GRACE[i[1]])))
+        corpus_grace.append(list((i[0], GRACE[i[1]])))
     else:
         corpus_grace.append(list((i[0], i[1])))
 
@@ -231,7 +295,7 @@ for i, item in enumerate(corpus_grace):
     if item[1] == "V":
         corpus_grace[i] = (item[0], verb(item[0], i))
         #print(item[0], verb(item[0], i))
-    if item[1] == "P":
+    elif item[1] == "P":
         corpus_grace[i] = (item[0], pronoun(item[0], i))
         print(item[0], pronoun(item[0], i))
     elif item[1] == "N" or item[1] == "NUM" or item[1] == "PROPN":
@@ -239,7 +303,7 @@ for i, item in enumerate(corpus_grace):
         #print(item[0], noun(item[0], i, item[1]))
 
 
-#with open("S1/Projet2/DDHC_B.txt", "w", encoding='utf-8') as file:
-#    for i in corpus_grace:
-#        file.write(f"{i[0]} {i[1]}\n")
+with open("S1/Projet2/DDHC_B.txt", "w", encoding='utf-8') as file:
+    for i in corpus_grace:
+        file.write(f"{i[0]} {i[1]}\n")
 
