@@ -221,11 +221,13 @@ def adjectives(word:str, index:int) ->str:
         pattern+="-"
     
     # Gender
-    if ref_word.endswith(("l", "lle")):
-        if ref_word.endswith("lle"):
+    if ref_word.endswith(("l", "le", "ls", "les")):
+        if ref_word.endswith(("le", "les")):
             pattern+="f"
         else:
             pattern+="m"
+    elif ref_word.endswith(("c", "cs")):
+        pattern+="m"
     elif pattern_before[0]=="N":
         if pattern_before[2] == "f":
             pattern+="f"
@@ -253,7 +255,23 @@ def adjectives(word:str, index:int) ->str:
     # Number
     if ref_word[-2] == "u" and ref_word.endswith("x"):
         pattern+="p"
+    elif ref_word.endswith(("les", "ls")):
+        pattern+="p"
+    elif ref_word.endswith(("le", "l")):
+        pattern+="s"
+    elif ref_word.endswith(("c", "cs")):
+        if ref_word.endswith("cs"):
+            pattern += "p"
+        else:
+            pattern += "s"
     elif pattern_before[0] == "N":
+        if pattern_before[3] == "p":
+            pattern+="p"
+        elif pattern_before[3] == "s":
+            pattern+="s"
+        else:
+            pattern+="-"
+    elif pattern_before[0] == "D":
         if pattern_before[3] == "p":
             pattern+="p"
         elif pattern_before[3] == "s":
@@ -269,7 +287,7 @@ def adjectives(word:str, index:int) ->str:
 
 def noun(word:str, index:int, init_pattern:str) -> str:
     pattern = "N"
-    
+    ref_word = word
     pattern_before = ""
     if index != 0:
         pattern_before = get_pattern(corpus_grace[index-1][0], index-1)
@@ -285,11 +303,22 @@ def noun(word:str, index:int, init_pattern:str) -> str:
         pattern += "c" 
     # Gender
     if index != 0:
-        if word.endswith(TERM_MASC):
+        if ref_word.endswith(TERM_MASC):
             pattern+="m"
-        elif word.endswith(TERM_FEM):
+        elif ref_word.endswith(TERM_FEM):
+            pattern+="f"
+        elif corpus_grace[index-1][0] == "le" or corpus_grace[index-1][0] == "du":
+            pattern+="m"
+        elif corpus_grace[index-1][0] == "la":
             pattern+="f"
         elif pattern_before[0] == "D":
+            if pattern_before[3] == "f":
+                pattern+="f"
+            elif pattern_before[3] == "m":
+                pattern+="m"
+            else:
+                pattern+="-"
+        elif pattern_before[0] == "A":
             if pattern_before[3] == "f":
                 pattern+="f"
             elif pattern_before[3] == "m":
@@ -303,7 +332,6 @@ def noun(word:str, index:int, init_pattern:str) -> str:
     
     # Number
     if index != 0:
-        pass
         if pattern_before[0] == "D":
             if pattern_before[4] == "p":
                 pattern+="p"
@@ -311,8 +339,19 @@ def noun(word:str, index:int, init_pattern:str) -> str:
                 pattern+="s"
             else:
                 pattern+="-"
+        elif pattern_before[0] == "A":
+            if pattern_before[-1] == "p":
+                pattern+="p"
+            elif pattern_before[-1] == "s":
+                pattern+="s"
+            else:
+                pattern+="-"
+        elif pattern[2] == "f" and ref_word[-1] == "s":
+            pattern+="p"
         else:
                 pattern+="-"
+    elif "'" in corpus_grace[index-1][0] and pattern_before[0] == "D":
+        pattern +="s"
     else:
         pattern+="-"
 
@@ -439,7 +478,7 @@ def determiners(word:str, index:int) -> str:
     if pattern[1] == "a":
         if ref_word == "la" or ref_word == "une":
             pattern+="f"
-        elif ref_word == "le" or ref_word == "un":
+        elif ref_word == "le" or ref_word == "un" or ref_word == "du":
             pattern+="m"
         else:
             pattern+="-"
@@ -465,20 +504,20 @@ def determiners(word:str, index:int) -> str:
             pattern+="f"
         else:
             pattern+="m"
-    elif ref_word == "du" or ref_word == "au":
+    elif ref_word == "au":
         pattern+="m"
     elif ref_word.endswith(("l", "lle")):
         if ref_word.endswith("lle"):
             pattern+="f"
         else:
             pattern+="m"
-    #elif pattern_after[0] == "N":
-    #    if pattern_after[3] == "f":
-    #        pattern+="f"
-    #    elif pattern_after[3] == "m":
-    #        pattern+="m"
-    #    else:
-    #        pattern+="-"
+    elif pattern_after[0] == "N":
+        if pattern_after[2] == "f":
+            pattern+="f"
+        elif pattern_after[2] == "m":
+            pattern+="m"
+        else:
+            pattern+="-"
     elif pattern_after[0] == "A":
         if pattern_after[3] == "f":
             pattern+="f"
@@ -494,6 +533,15 @@ def determiners(word:str, index:int) -> str:
         pattern+="p"
     else:
         pattern+="s"
+
+    # Possessor 
+    if pattern[1] == "s":
+        if ref_word in DET_POS[8:]:
+            pattern+="p"
+        else:
+            pattern+="s"
+    else:
+        pattern+="-"
 
     # Nature
     if ref_word in DET_ART_DEF:
@@ -581,7 +629,6 @@ def process_corpus():
         elif item[1] == "S":
             update_corpus(i, (item[0], adpositions(item[0], i)))
             #print(item[0], adpositions(item[0], i))
-
 
     with open("S1/Projet2/DDHC_B.txt", "w", encoding='utf-8') as file:
         for i in corpus_grace:
