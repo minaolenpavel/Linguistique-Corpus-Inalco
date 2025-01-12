@@ -8,3 +8,5 @@ les verbes conjugués aux personnes du pluriels ont des terminaisons spécifique
 les participes sont des verbes qui finissent en é/u/i
 
 identification d'un "que" et similaire pour le subjonctif
+
+http://www.lexique.org/shiny/openlexicon/

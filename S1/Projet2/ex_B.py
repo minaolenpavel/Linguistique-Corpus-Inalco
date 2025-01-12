@@ -192,7 +192,7 @@ def adjectives(word:str, index:int) ->str:
         pattern+="-"
     
     # Gender
-    if corpus_grace[index-1][1].startswith("N"):
+    if corpus_grace[index-1][1][0]=="N":
         if corpus_grace[index-1][1][2] == "f":
             pattern+="f"
         elif corpus_grace[index-1][1][2] == "m":
@@ -203,14 +203,25 @@ def adjectives(word:str, index:int) ->str:
                     pattern+="f"
                 elif corpus_grace[index-2][1][2] == "m":
                     pattern+="m"
+                else:
+                    pattern+="-"
     else:
         pattern+="-"
+
+    # Number
+    if ref_word[-2] == "u" and ref_word.endswith("x"):
+        pattern+="p"
+    else:
+        pattern+="-"
+
 
     return pattern
 
 
 def noun(word:str, index:int, init_pattern:str) -> str:
     pattern = "N"
+    token_before = corpus_grace[index-1]
+    token_after = corpus_grace[index+1]
 
     # Type
     if init_pattern == "NUM":
@@ -227,6 +238,20 @@ def noun(word:str, index:int, init_pattern:str) -> str:
     else:
         pattern+="-"
     
+    # Number
+    if token_before[1][0] == "D":
+        if token_before[1][4] == "p":
+            pattern+="p"
+        elif token_before[1][4] == "s":
+            pattern+="s"
+    elif token_after[1] == "A":
+        pattern_after = adjectives(token_after[0], index+1)
+        if pattern_after[4] == "p":
+            pattern+="p"
+        elif pattern_after[4] == "s":
+            pattern+="s"
+    else:
+        pattern+="-"
 
     return pattern
 
@@ -447,25 +472,25 @@ for i in corpus:
 for i, item in enumerate(corpus_grace):
     if item[1] == "V":
         corpus_grace[i] = (item[0], verb(item[0], i))
-        #print(item[0], verb(item[0], i))
+        print(item[0], verb(item[0], i))
     elif item[1] == "A":
         corpus_grace[i] = (item[0], adjectives(item[0], i))
         print(item[0], adjectives(item[0], i))
     elif item[1] == "P":
         corpus_grace[i] = (item[0], pronoun(item[0], i))
-        #print(item[0], pronoun(item[0], i))
+        print(item[0], pronoun(item[0], i))
     elif item[1] == "N" or item[1] == "NUM" or item[1] == "PROPN":
         corpus_grace[i] = (item[0], noun(item[0], i, item[1]))
-        #print(item[0], noun(item[0], i, item[1]))
+        print(item[0], noun(item[0], i, item[1]))
     elif item[1] == "D":
         corpus_grace[i] = (item[0], determiners(item[0], i))
-        #print(item[0], determiners(item[0], i))
+        print(item[0], determiners(item[0], i))
     elif item[1] == "R":
         corpus_grace[i] = (item[0], adverbs(item[0], i))
-        #print(item[0], adverbs(item[0], i))
+        print(item[0], adverbs(item[0], i))
     elif item[1] == "S":
         corpus_grace[i] = (item[0], adpositions(item[0], i))
-        #print(item[0], adpositions(item[0], i))
+        print(item[0], adpositions(item[0], i))
 
 
 with open("S1/Projet2/DDHC_B.txt", "w", encoding='utf-8') as file:
