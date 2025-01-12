@@ -494,6 +494,8 @@ def determiners(word:str, index:int) -> str:
             pattern+="f"
         elif "s" not in ref_word:
             pattern+="m"
+        else:
+            pattern+="-"
     elif pattern[1] == "i":
         if ref_word.endswith(("es", "e")):
             pattern+="f"
