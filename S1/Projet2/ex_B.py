@@ -26,6 +26,13 @@ TERM_1_PERSON_PLURAL = ("ons", "sommes")
 TERM_2_PERSON_PLURAL = ("ez", "êtes")
 TERM_3_PERSON_PLURAL = ("ent", "ont")
 
+# Resources adjectives
+TERM_ADJ_ORDINALS = ("ième", "ier", "ière")
+ADJ_POS = ('mon', 'ma', 'mes', 'ton', 'ta', 'tes', 'son', 'sa', 'ses', 'notre', 'nos', 'votre', 'vos', 'leur', 'leurs', 'mien', 'mienne', 'miens', 'miennes')
+ADJ_INDEFINIS = ('autre', 'autres', 'certains', 'certaines', 'chaque', 'divers', 'diverse', 'exact', 'exacte', 'mêmes', 'multiple', 'multiples', 'nul', 'nulle', 'plusieurs', 'quelques', 'tout', 'toute', 'tous', 'toutes', 'tel', 'tels', 'telle', 'telles', 'aucun', 'aucune', 'nombreux', 'nombreuse', 'même', 'quelques-uns', 'quelques-unes', 'plupart')
+ADJ_COMP = ("meilleur", "meilleure", "meilleurs", "meilleures", "pire", "pires", "moindre")
+
+
 # Resources nouns
 TERM_MASC = ('oir', 'age', 'gramme', 'scope', 'drome', 'er', 'phone', 'mètre', 'ment', 'isme', 'cide')
 TERM_FEM = ('manie', 'nomie', 'ine', 'erie', 'ssion', 'ure', 'ite', 'esse', 'logie', 'thérapie', 'tion', 'phobie', 'sion', 'ette', 'ie', 'té', 'ée', 'ence', 'ance')
@@ -40,7 +47,9 @@ PRO_POS = ('le mien',  'le nôtre', 'le tien', 'le vôtre', 'le sien', 'le leur'
 PRO_INT = ('lequel', 'laquelle', 'lesquels', 'lesquelles')
 PRO_REL = ("qu'", 'qui', 'que', 'dont', 'lequel', 'laquelle', 'lesquels', 'lesquelles')
 PRO_REF = ('se', 'soi')
-PRO_CAR = ('un', 'deux', 'trois', 'quatre', 'cinq', 'six', 'sept', 'huit', 'neuf', 'dix')
+
+# Numbers
+NUM = ('un', 'deux', 'trois', 'quatre', 'cinq', 'six', 'sept', 'huit', 'neuf', 'dix', 'onze', 'douze', 'treize', 'quatorze', 'quinze', 'seize', 'vingt', 'trente', 'quarante', 'cinquante', 'soixante', 'cent', 'mille', 'million', 'milliard', 'vingt-un', 'vingt-deux', 'vingt-trois', 'vingt-quatre', 'vingt-cinq', 'vingt-six', 'vingt-sept', 'vingt-huit', 'vingt-neuf', 'trente-un', 'trente-deux', 'trente-trois', 'trente-quatre', 'trente-cinq', 'trente-six', 'trente-sept', 'trente-huit', 'trente-neuf', 'quarante-un', 'quarante-deux', 'quarante-trois', 'quarante-quatre', 'quarante-cinq', 'quarante-six', 'quarante-sept', 'quarante-huit', 'quarante-neuf', 'cinquante-un', 'cinquante-deux', 'cinquante-trois', 'cinquante-quatre', 'cinquante-cinq', 'cinquante-six', 'cinquante-sept', 'cinquante-huit', 'cinquante-neuf', 'soixante-un', 'soixante-deux', 'soixante-trois', 'soixante-quatre', 'soixante-cinq', 'soixante-six', 'soixante-sept', 'soixante-huit', 'soixante-neuf', 'soixante-dix', 'soixante-et-onze', 'soixante-douze', 'soixante-treize', 'soixante-quatorze', 'soixante-quinze', 'soixante-seize', 'quatre-vingt', 'quatre-vingt-un', 'quatre-vingt-deux', 'quatre-vingt-trois', 'quatre-vingt-quatre', 'quatre-vingt-cinq', 'quatre-vingt-six', 'quatre-vingt-sept', 'quatre-vingt-huit', 'quatre-vingt-neuf', 'quatre-vingt-dix', 'quatre-vingt-onze', 'quatre-vingt-douze', 'quatre-vingt-treize', 'quatre-vingt-quatorze', 'quatre-vingt-quinze', 'quatre-vingt-seize', 'cent-un', 'cent-deux', 'cent-trois', 'cent-quatre', 'cent-cinq', 'cent-six', 'cent-sept', 'cent-huit', 'cent-neuf', 'deux-cents', 'trois-cents', 'quatre-cents', 'cinq-cents', 'six-cents', 'sept-cents', 'huit-cents', 'neuf-cents', 'mille', 'mille-un', 'mille-deux', 'mille-trois', 'mille-quatre', 'mille-cinq', 'mille-six', 'mille-sept', 'mille-huit', 'mille-neuf', 'deux-mille', 'trois-mille', 'quatre-mille', 'cinq-mille', 'six-mille', 'sept-mille', 'huit-mille', 'neuf-mille', 'un-million', 'deux-millions', 'trois-millions', 'quatre-millions', 'cinq-millions', 'six-millions', 'sept-millions', 'huit-millions', 'neuf-millions', 'un-milliard', 'deux-milliards', 'trois-milliards', 'quatre-milliards', 'cinq-milliards', 'six-milliards', 'sept-milliards', 'huit-milliards', 'neuf-milliards')
 
 # Resources determiners
 DET_ART_DEF = ('le', 'la', 'les', "l'", "aux")
@@ -54,6 +63,10 @@ DET_REL = ('lequel', 'laquelle', 'lesquels', 'lesquelles')
 # Resources adverbs 
 ADV_INTER_EXCL = ("pourquoi", "comment", "combien", "où", "quand", "que", "quoi", "comme", "quel", "quelle", "si")
 ADV_PARTIC = ("ne", "n'" "pas", "plus", "jamais", "rien", "guère", "aucun", "personne", "nulle part", "non", "afin")
+
+# Resources adpositions
+PREPOSITIONS = ("a l'instar", "afin de", "après", "au-dessus", "audit", "auprès", "auxdits", "avant", "avec", "chez", "concernant", "contre", "d'", "dans", "de", "depuis", "derrière", "desdites", "desdits", "devant", "devers", "dudit", "durant", "dès", "en", "entre", "envers", "excepté", "grâce", "hormis", "hors", "jouxte", "jusqu'au", "jusqu'à", "jusque", "malgré", "moyennant", "nonobstant", "outre", "par", "par-dedans", "par-delà", "par-derrière", "par-dessus", "par-devant", "par-devers", "parmi", "pendant", "plein", "pour", "près", "revoici", "revoilà", "sans", "sauf", "selon", "sous", "suivant", "sur", "vers", "versus", "via", "vja", "vis-à-vis", "voici", "voilà", "à", "à l'encontre", "à l'instar")
+
 
 
 # FUNCTION FOR DEBUG ONLY
@@ -153,6 +166,49 @@ def verb(word:str, index:int) -> str:
         pattern+="-"
     return pattern
 
+def adjectives(word:str, index:int) ->str:
+    pattern = "A"
+    ref_word = word.lower()
+
+    # Type
+    if ref_word.endswith(TERM_ADJ_ORDINALS):
+        pattern+= "o"
+    elif ref_word in NUM:
+        pattern+="k"
+    elif ref_word in ADJ_POS: 
+        pattern+="s"
+    elif ref_word in ADJ_INDEFINIS:
+        pattern+="i"
+    else:
+        pattern+="f"
+
+    # Degree
+    if pattern[1] == "f":
+        if ref_word in ADJ_COMP:
+            pattern+="c"
+        else:
+            pattern+="p"
+    else:
+        pattern+="-"
+    
+    # Gender
+    if corpus_grace[index-1][1].startswith("N"):
+        if corpus_grace[index-1][1][2] == "f":
+            pattern+="f"
+        elif corpus_grace[index-1][1][2] == "m":
+            pattern+="m"
+        else:
+            if corpus_grace[index-2][1].startswith("N"):
+                if corpus_grace[index-2][1][2] == "f":
+                    pattern+="f"
+                elif corpus_grace[index-2][1][2] == "m":
+                    pattern+="m"
+    else:
+        pattern+="-"
+
+    return pattern
+
+
 def noun(word:str, index:int, init_pattern:str) -> str:
     pattern = "N"
 
@@ -197,7 +253,7 @@ def pronoun(word:str, index:int) -> str:
         pattern+="r"
     elif ref_word in PRO_REF:
         pattern+="x"
-    elif ref_word in PRO_CAR:
+    elif ref_word in NUM:
         pattern+="k"
     else:
         pattern+="-"
@@ -356,9 +412,18 @@ def adverbs(word:str, index:int) -> str:
         pattern+="n"
     else:
         pattern+="p"
-
     return pattern
 
+def adpositions(word:str, index:str) -> str:
+    pattern = "S"
+    ref_word = word.lower()
+
+    if ref_word in PREPOSITIONS:
+        pattern+="p"
+    else:
+        pattern+="d"
+    
+    return pattern
 
 
 
@@ -383,6 +448,9 @@ for i, item in enumerate(corpus_grace):
     if item[1] == "V":
         corpus_grace[i] = (item[0], verb(item[0], i))
         #print(item[0], verb(item[0], i))
+    elif item[1] == "A":
+        corpus_grace[i] = (item[0], adjectives(item[0], i))
+        print(item[0], adjectives(item[0], i))
     elif item[1] == "P":
         corpus_grace[i] = (item[0], pronoun(item[0], i))
         #print(item[0], pronoun(item[0], i))
@@ -395,9 +463,9 @@ for i, item in enumerate(corpus_grace):
     elif item[1] == "R":
         corpus_grace[i] = (item[0], adverbs(item[0], i))
         #print(item[0], adverbs(item[0], i))
-    elif item[1] == "R":
-        corpus_grace[i] = (item[0], adverbs(item[0], i))
-        print(item[0], adverbs(item[0], i))
+    elif item[1] == "S":
+        corpus_grace[i] = (item[0], adpositions(item[0], i))
+        #print(item[0], adpositions(item[0], i))
 
 
 with open("S1/Projet2/DDHC_B.txt", "w", encoding='utf-8') as file:

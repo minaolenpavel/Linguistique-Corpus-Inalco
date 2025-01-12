@@ -4,8 +4,18 @@ TERM_1_PERSON_PLURAL = "ons"
 TERM_2_PERSON_PLURAL = "ez"
 TERM_3_PERSON_PLURAL = ("ent", "ont")
 
-word = "ont"
+NUM = ('un', 'deux', 'trois', 'quatre', 'cinq', 'six', 'sept', 'huit', 'neuf', 'dix', 'onze', 'douze', 'treize', 'quatorze', 'quinze', 'seize', 'vingt', 'trente', 'quarante', 'cinquante', 'soixante', 'cent', 'mille', 'million', 'milliard')
 
-if word.endswith(TERM_3_PERSON_PLURAL):
-    print("ok")
+word = "quatre-vingt-dix"
+
+if '-' in word:
+    word = word.split("-")
+    for w in word:
+        for n in NUM:
+            if n in w:
+                print("yup", n)
+else:
+    for n in NUM:
+        if word in n:
+            print("yup", n)
 
