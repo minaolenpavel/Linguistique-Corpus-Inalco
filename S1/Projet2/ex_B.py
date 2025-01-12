@@ -56,7 +56,7 @@ DET_ART_DEF = ('le', 'la', 'les', "l'", "aux")
 DET_ART_IND = ('un', 'une', 'des', 'de', 'du')
 DET_DEM = ('ce', 'cet', 'cette', 'ces')
 DET_POS = ('mon', 'ma', 'mes', 'ton', 'ta', 'tes', 'son', 'sa', 'ses', 'notre', 'nos', 'votre', 'vos', 'leur', 'leurs')
-DET_IND = ('certains', 'certaines', 'quelques', 'tout', 'toutes', 'chaque', 'aucun', 'aucune', 'certaine', 'certain', 'tous', 'toute')
+DET_IND = ('certains', 'certaines', 'quelques', 'tout', 'toutes', 'chaque', 'aucun', 'aucune', 'certaine', 'certain', 'tous', 'toute', 'nul', 'nulle')
 DET_INT_EXC = ('quel', 'quelle', 'quels', 'quelles')
 DET_REL = ('lequel', 'laquelle', 'lesquels', 'lesquelles')
 
@@ -83,6 +83,30 @@ def print_context(index:int):
     print(f"Corpus Slice: {corpus_grace[index-2:index+2]}") 
     print("\n")
 
+def get_pattern(word:str, index:str) -> str:
+    init_pattern = corpus_grace[index][1]
+    pattern = ""
+
+    if len(corpus_grace[index][1]) >= 1:
+        return corpus_grace[index][1]
+    elif init_pattern[0] == "N":
+        pattern = noun(word, index, init_pattern)
+    elif init_pattern[0] == "V":
+        pattern = verb(word, index)
+    elif init_pattern[0] == "P":
+        pattern = pronoun(word, index)
+    elif init_pattern[0] == "A":
+        pattern = adjectives(word, index) 
+    elif init_pattern[0] == "D":
+        pattern = determiners(word, index)
+    elif init_pattern[0] == "R":
+        pattern = adverbs(word, index)
+    elif init_pattern[0] == "S":
+        pattern = adpositions(word, index)
+    else:
+        pattern = init_pattern
+    
+    return pattern
 
 def verb(word:str, index:int) -> str:
     pattern = "V"
@@ -170,6 +194,11 @@ def adjectives(word:str, index:int) ->str:
     pattern = "A"
     ref_word = word.lower()
 
+    pattern_before = ""
+    if index != 0:
+        pattern_before = get_pattern(corpus_grace[index-1][0], index-1)
+    pattern_after = get_pattern(corpus_grace[index+1][0], index+1)
+
     # Type
     if ref_word.endswith(TERM_ADJ_ORDINALS):
         pattern+= "o"
@@ -192,25 +221,45 @@ def adjectives(word:str, index:int) ->str:
         pattern+="-"
     
     # Gender
-    if corpus_grace[index-1][1][0]=="N":
-        if corpus_grace[index-1][1][2] == "f":
+    if ref_word.endswith(("l", "lle")):
+        if ref_word.endswith("lle"):
             pattern+="f"
-        elif corpus_grace[index-1][1][2] == "m":
+        else:
+            pattern+="m"
+    elif pattern_before[0]=="N":
+        if pattern_before[2] == "f":
+            pattern+="f"
+        elif pattern_before[2] == "m":
             pattern+="m"
         else:
-            if corpus_grace[index-2][1].startswith("N"):
-                if corpus_grace[index-2][1][2] == "f":
-                    pattern+="f"
-                elif corpus_grace[index-2][1][2] == "m":
-                    pattern+="m"
-                else:
-                    pattern+="-"
+            pattern+="-"
+    elif pattern_before[0] == "D":
+        if pattern_before[3] == "f":
+            pattern+="f"
+        elif pattern_before[3] == "m":
+            pattern+="m"
+        else:
+            pattern+="-"
+    elif pattern_before[0] == "A":
+        if pattern_before[3] == "f":
+            pattern+="f"
+        elif pattern_before[3] == "m":
+            pattern+="m"
+        else:
+            pattern+="-"
     else:
         pattern+="-"
 
     # Number
     if ref_word[-2] == "u" and ref_word.endswith("x"):
         pattern+="p"
+    elif pattern_before[0] == "N":
+        if pattern_before[3] == "p":
+            pattern+="p"
+        elif pattern_before[3] == "s":
+            pattern+="s"
+        else:
+            pattern+="-"
     else:
         pattern+="-"
 
@@ -220,8 +269,12 @@ def adjectives(word:str, index:int) ->str:
 
 def noun(word:str, index:int, init_pattern:str) -> str:
     pattern = "N"
-    token_before = corpus_grace[index-1]
-    token_after = corpus_grace[index+1]
+    
+    pattern_before = ""
+    if index != 0:
+        pattern_before = get_pattern(corpus_grace[index-1][0], index-1)
+    pattern_after = get_pattern(corpus_grace[index+1][0], index+1)
+
 
     # Type
     if init_pattern == "NUM":
@@ -231,25 +284,35 @@ def noun(word:str, index:int, init_pattern:str) -> str:
     else:
         pattern += "c" 
     # Gender
-    if word.endswith(TERM_MASC):
-        pattern+="m"
-    elif word.endswith(TERM_FEM):
-        pattern+="f"
+    if index != 0:
+        if word.endswith(TERM_MASC):
+            pattern+="m"
+        elif word.endswith(TERM_FEM):
+            pattern+="f"
+        elif pattern_before[0] == "D":
+            if pattern_before[3] == "f":
+                pattern+="f"
+            elif pattern_before[3] == "m":
+                pattern+="m"
+            else:
+                pattern+="-"
+        else:
+            pattern+="-"
     else:
         pattern+="-"
     
     # Number
-    if token_before[1][0] == "D":
-        if token_before[1][4] == "p":
-            pattern+="p"
-        elif token_before[1][4] == "s":
-            pattern+="s"
-    elif token_after[1] == "A":
-        pattern_after = adjectives(token_after[0], index+1)
-        if pattern_after[4] == "p":
-            pattern+="p"
-        elif pattern_after[4] == "s":
-            pattern+="s"
+    if index != 0:
+        pass
+        if pattern_before[0] == "D":
+            if pattern_before[4] == "p":
+                pattern+="p"
+            elif pattern_before[4] == "s":
+                pattern+="s"
+            else:
+                pattern+="-"
+        else:
+                pattern+="-"
     else:
         pattern+="-"
 
@@ -340,6 +403,11 @@ def determiners(word:str, index:int) -> str:
     pattern ="D"
     ref_word = word.lower()
 
+    pattern_before = ""
+    if index != 0:
+        pattern_before = get_pattern(corpus_grace[index-1][0], index-1)
+    pattern_after = get_pattern(corpus_grace[index+1][0], index+1)
+    print("pattern after",pattern_after)
     # Type
     if ref_word in DET_ART_DEF or ref_word in DET_ART_IND:
         pattern+="a"
@@ -397,6 +465,27 @@ def determiners(word:str, index:int) -> str:
             pattern+="f"
         else:
             pattern+="m"
+    elif ref_word == "du" or ref_word == "au":
+        pattern+="m"
+    elif ref_word.endswith(("l", "lle")):
+        if ref_word.endswith("lle"):
+            pattern+="f"
+        else:
+            pattern+="m"
+    #elif pattern_after[0] == "N":
+    #    if pattern_after[3] == "f":
+    #        pattern+="f"
+    #    elif pattern_after[3] == "m":
+    #        pattern+="m"
+    #    else:
+    #        pattern+="-"
+    elif pattern_after[0] == "A":
+        if pattern_after[3] == "f":
+            pattern+="f"
+        elif pattern_after[3] == "m":
+            pattern+="m"
+        else:
+            pattern+="-"
     else:
         pattern+="-"
 
@@ -450,50 +539,55 @@ def adpositions(word:str, index:str) -> str:
     
     return pattern
 
-
-
-corpus = []
-with open("S1/Projet2/DDHC_A.txt", "r", encoding='utf-8') as file:
-    for line in file:
-        split_line = line.strip().split(" ")
-        corpus.append(split_line)
-    file.close()
+def update_corpus(index:int, new_value:tuple):
+    corpus_grace[index] = new_value
+    print(new_value)
 
 
 corpus_grace = []
-for i in corpus:
-    if i[1] in GRACE:
-        corpus_grace.append(list((i[0], GRACE[i[1]])))
-    else:
-        corpus_grace.append(list((i[0], i[1])))
+def process_corpus():
+    corpus = []
+    with open("S1/Projet2/DDHC_A.txt", "r", encoding='utf-8') as file:
+        for line in file:
+            split_line = line.strip().split(" ")
+            corpus.append(split_line)
+        file.close()
+
+    for i in corpus:
+        if i[1] in GRACE:
+            corpus_grace.append(list((i[0], GRACE[i[1]])))
+        else:
+            corpus_grace.append(list((i[0], i[1])))
+
+    for i, item in enumerate(corpus_grace):
+        if item[1] == "V":
+            update_corpus(i,(item[0], verb(item[0], i)))
+            #print(item[0], verb(item[0], i))
+        elif item[1] == "A":
+            update_corpus(i, (item[0], adjectives(item[0], i)))
+            #print(item[0], adjectives(item[0], i))
+        elif item[1] == "P":
+            update_corpus(i, (item[0], pronoun(item[0], i)))
+            #print(item[0], pronoun(item[0], i))
+        elif item[1] == "N" or item[1] == "NUM" or item[1] == "PROPN":
+            update_corpus(i, (item[0], noun(item[0], i, item[1])))
+            #print(item[0], noun(item[0], i, item[1]))
+        elif item[1] == "D":
+            update_corpus(i, (item[0], determiners(item[0], i)))
+            #print(item[0], determiners(item[0], i))
+        elif item[1] == "R":
+            update_corpus(i, (item[0], adverbs(item[0], i)))
+            #print(item[0], adverbs(item[0], i))
+        elif item[1] == "S":
+            update_corpus(i, (item[0], adpositions(item[0], i)))
+            #print(item[0], adpositions(item[0], i))
+
+
+    with open("S1/Projet2/DDHC_B.txt", "w", encoding='utf-8') as file:
+        for i in corpus_grace:
+            file.write(f"{i[0]} {i[1]}\n")
 
 
 
-for i, item in enumerate(corpus_grace):
-    if item[1] == "V":
-        corpus_grace[i] = (item[0], verb(item[0], i))
-        print(item[0], verb(item[0], i))
-    elif item[1] == "A":
-        corpus_grace[i] = (item[0], adjectives(item[0], i))
-        print(item[0], adjectives(item[0], i))
-    elif item[1] == "P":
-        corpus_grace[i] = (item[0], pronoun(item[0], i))
-        print(item[0], pronoun(item[0], i))
-    elif item[1] == "N" or item[1] == "NUM" or item[1] == "PROPN":
-        corpus_grace[i] = (item[0], noun(item[0], i, item[1]))
-        print(item[0], noun(item[0], i, item[1]))
-    elif item[1] == "D":
-        corpus_grace[i] = (item[0], determiners(item[0], i))
-        print(item[0], determiners(item[0], i))
-    elif item[1] == "R":
-        corpus_grace[i] = (item[0], adverbs(item[0], i))
-        print(item[0], adverbs(item[0], i))
-    elif item[1] == "S":
-        corpus_grace[i] = (item[0], adpositions(item[0], i))
-        print(item[0], adpositions(item[0], i))
-
-
-with open("S1/Projet2/DDHC_B.txt", "w", encoding='utf-8') as file:
-    for i in corpus_grace:
-        file.write(f"{i[0]} {i[1]}\n")
-
+if __name__ == "__main__":
+    process_corpus()
