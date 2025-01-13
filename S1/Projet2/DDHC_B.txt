@@ -52,7 +52,7 @@ des Da--p-i
 droits Nc-p
 de Sp
 l' Da--s-d
-homme Nc-s
+homme Ncms
 sont Vm--3p-
 les Da--p-d
 seules Afpfp
@@ -86,7 +86,7 @@ et Cc
 sacrés Vm-----
 de Sp
 l' Da--s-d
-homme Nc-s
+homme Ncms
 , F
 afin Rpp
 que Cs
@@ -200,7 +200,7 @@ droits Nc-p
 suivants Afp-p
 de Sp
 l' Da--s-d
-homme Nc-s
+homme Ncms
 et Cc
 du Da-ms-i
 citoyen Ncms
@@ -251,7 +251,7 @@ et Cc
 imprescriptibles Afpfp
 de Sp
 l' Da--s-d
-homme Nc-s
+homme Ncms
 . F
 Ces Dd--p--
 droits Nc-p
@@ -327,7 +327,7 @@ droits Nc-p
 naturels Afpmp
 de Sp
 chaque Di-fs--
-homme Ncfs
+homme Ncms
 n' Rgp
 a Vmi----
 de Sp
@@ -426,7 +426,7 @@ Tous Di-mp--
 les Da--p-d
 citoyens Nc-p
 ont Vm--3p-
-droit Nc--
+droit Ncms
 de Sp
 concourir Vmn----
 personnellement Rgp
@@ -680,7 +680,7 @@ ne Rpc
 trouble Afpfs
 pas Rgp
 l' Da--s-d
-ordre Nc-s
+ordre Ncms
 public Afpms
 établi Vmps-sm
 par Sp
@@ -707,7 +707,7 @@ plus Rpc
 précieux Afp-p
 de Sp
 l' Da--s-d
-homme Nc-s
+homme Ncms
 : F
 tout Di-ms--
 citoyen Ncms
@@ -747,7 +747,7 @@ des Da--p-i
 droits Nc-p
 de Sp
 l' Da--s-d
-homme Nc-s
+homme Ncms
 et Cc
 du Da-ms-i
 citoyen Ncms
@@ -813,7 +813,7 @@ les Da--p-d
 citoyens Nc-p
 , F
 en Sp
-raison Nc--
+raison Ncfs
 de Sp
 leurs Ds3-pp-
 facultés Nc-p
@@ -822,7 +822,7 @@ Article Nc--
 XIV Nk--
 - F
 Chaque Di-fs--
-citoyen Ncfs
+citoyen Ncms
 a Vmi----
 le Da-ms-d
 droit Ncms
@@ -852,7 +852,7 @@ d' Sp
 en Sp
 suivre Vmn----
 l' Da--s-d
-emploi Nc-s
+emploi Ncms
 et Cc
 d' Sp
 en Sp

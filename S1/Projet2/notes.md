@@ -12,3 +12,5 @@ identification d'un "que" et similaire pour le subjonctif
 http://www.lexique.org/shiny/openlexicon/
 
 liste de mots courants : article, ordre, homme, droit, citoyens, raison, faculté, représentant, emploi
+
+BESOIN DE FAIRE EN SORTE QUE LE MODELE PUISSE REGARDE LE MOT DEVANT POUR LES ADJ, DET

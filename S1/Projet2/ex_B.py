@@ -36,6 +36,9 @@ ADJ_COMP = ("meilleur", "meilleure", "meilleurs", "meilleures", "pire", "pires",
 # Resources nouns
 TERM_MASC = ('oir', 'age', 'gramme', 'scope', 'drome', 'er', 'phone', 'mètre', 'ment', 'isme', 'cide')
 TERM_FEM = ('manie', 'nomie', 'ine', 'erie', 'ssion', 'ure', 'ite', 'esse', 'logie', 'thérapie', 'tion', 'phobie', 'sion', 'ette', 'ie', 'té', 'ée', 'ence', 'ance')
+COMMON_MASC = ('article', 'ordre', 'homme', 'droit', 'citoyen', 'emploi', 'représentant')
+COMMON_FEM = ('raison', 'faculté')
+
 
 # Resources pronouns 
 PRO_PERS_SUJ = ('je','nous', 'tu','vous', 'il', 'elle', 'ils', 'elles')
@@ -302,10 +305,14 @@ def noun(word:str, index:int, init_pattern:str) -> str:
     else:
         pattern += "c" 
     # Gender
-    if index != 0:
+    if index != 0 or ref_word in COMMON_MASC or ref_word in COMMON_FEM:
         if ref_word.endswith(TERM_MASC):
             pattern+="m"
         elif ref_word.endswith(TERM_FEM):
+            pattern+="f"
+        elif ref_word in COMMON_MASC:
+            pattern+="m"
+        elif ref_word in COMMON_FEM:
             pattern+="f"
         elif corpus_grace[index-1][0] == "le" or corpus_grace[index-1][0] == "du":
             pattern+="m"
@@ -331,8 +338,13 @@ def noun(word:str, index:int, init_pattern:str) -> str:
         pattern+="-"
     
     # Number
-    if index != 0:
-        if pattern_before[0] == "D":
+    if index != 0 or ref_word in COMMON_MASC or ref_word in COMMON_FEM:
+        if ref_word in COMMON_FEM or ref_word in COMMON_MASC:
+            if ref_word.endswith("s"):
+                pattern+="p"
+            else:
+                pattern+="s"
+        elif pattern_before[0] == "D":
             if pattern_before[4] == "p":
                 pattern+="p"
             elif pattern_before[4] == "s":
