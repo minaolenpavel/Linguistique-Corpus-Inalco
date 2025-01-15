@@ -92,7 +92,7 @@ def get_pattern(word:str, index:str) -> str:
 
     if len(corpus_grace[index][1]) >= 1:
         return corpus_grace[index][1]
-    elif init_pattern[0] == "N":
+    elif init_pattern[0] == "N" or init_pattern[0] == "NUM" or init_pattern[0] == "PROPN":
         pattern = noun(word, index, init_pattern)
     elif init_pattern[0] == "V":
         pattern = verb(word, index)
@@ -307,7 +307,6 @@ def adjectives(word:str, index:int) ->str:
 
 
     return pattern
-
 
 def noun(word:str, index:int, init_pattern:str) -> str:
     pattern = "N"
@@ -628,9 +627,10 @@ def update_corpus(index:int, new_value:tuple):
 
 
 corpus_grace = []
-def process_corpus():
+
+def import_corpus():
     corpus = []
-    with open("S1/Projet2/DDHC_A.txt", "r", encoding='utf-8') as file:
+    with open("DDHC_A.txt", "r", encoding='utf-8') as file:
         for line in file:
             split_line = line.strip().split(" ")
             corpus.append(split_line)
@@ -642,6 +642,7 @@ def process_corpus():
         else:
             corpus_grace.append(list((i[0], i[1])))
 
+def process_corpus():
     for i, item in enumerate(corpus_grace):
         if item[1] == "V":
             update_corpus(i,(item[0], verb(item[0], i)))
@@ -665,11 +666,14 @@ def process_corpus():
             update_corpus(i, (item[0], adpositions(item[0], i)))
             #print(item[0], adpositions(item[0], i))
 
-    with open("S1/Projet2/DDHC_B.txt", "w", encoding='utf-8') as file:
+
+def write_corpus_txt():
+    with open("DDHC_B.txt", "w", encoding='utf-8') as file:
         for i in corpus_grace:
             file.write(f"{i[0]} {i[1]}\n")
 
 
-
 if __name__ == "__main__":
+    import_corpus()
     process_corpus()
+    write_corpus_txt()

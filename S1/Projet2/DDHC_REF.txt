@@ -4,8 +4,8 @@ DROITS Ncmp
 DE Sp
 L' Da-ms-d
 HOMME Npms
-ET X
-DU X
+ET Cc
+DU Da-ms-i
 CITOYEN Npms
 Adoptée Vmps-sf
 par Sp
@@ -14,7 +14,7 @@ Assemblée Ncfs
 constituante Afpfs
 du Da-ms-i
 20 Nkms
-au Nc-- #CONJ?
+au Sp
 26 Nkms
 août Ncms
 1789 Nkms
@@ -36,7 +36,7 @@ français Afpms
 constitués Vmps-pm
 en Sp
 Assemblée Npfs
-nationale Npfs # ou adj ?
+nationale Npfs
 , F
 considérant Vmpp---
 que Cs
@@ -163,13 +163,13 @@ incontestables Afpmp
 , F
 tournent Vm--3p-
 toujours Rgp
-au D--ms-- #CONJ? ADP?
+au Sp
 maintien Ncms
 de Sp
 la Da-fs-d
 Constitution Ncfs
 et Cc
-au Nc-- # CONJ? ADP?
+au Sp
 bonheur Ncms
 de Sp
 tous Pi-mp--
@@ -179,7 +179,7 @@ conséquence Ncfs
 , F
 l' Da-fs-d
 Assemblée Npfs
-nationale Np-- # ?
+nationale Npms
 reconnaît Vmip3s-
 et Cc
 déclare Vmip3s-
@@ -617,7 +617,7 @@ homme Ncms
 étant Vmpp---
 présumé Vmps-sm
 innocent Afpms
-jusqu Vm----- # PAS VERB
+jusqu Sp
 à Sp
 ce P--ms--
 qu' Pr-ms--
@@ -890,7 +890,7 @@ administration Ncfs
 . F
 Article Ncms
 XVI Nkms
--Toute Nc-- # PRON? DET?
+-Toute Pi-fs--
 société Ncfs
 dans Sp
 laquelle Pt-fs--
