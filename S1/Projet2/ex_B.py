@@ -20,7 +20,7 @@ TERM_PARTICIPE_PRESENT = "ant"
 TERM_INF = ("ir", "er", "re", "oir", "ire")
 TERM_SUBJ = ("isse", "isses", "issions", "issiez", "issent", "e", "es", "ions", "iez", "ent")
 TERM_CONDITIONNEL_PRESENT = ("erais", "erait", "erions", "eriez", "eraient", "irais", "irait", "irios", "iriez", "iraient", "rais", "rait", "rios", "riez", "raient")
-TERM_FUTUR_S = ("rai", "ras", "ra", "rons", "rez", "ront")
+TERM_FUTUR = ("rai", "ras", "ra", "rons", "rez", "ront")
 AUXILIAIRES = ("être", "avoir", "suis", "es", "est", "sommes", "êtes", "sont",  "été", "étais", "étais", "était", "étions", "étiez", "étaient","serai", "seras", "sera", "serons", "serez", "seront",  "serais", "serais", "serait", "serions", "seriez", "seraient",  "sois", "sois", "soit", "soyons", "soyez", "soient", "ai", "as", "a", "avons", "avez", "ont", "eu", "avais", "avais", "avait", "avions", "aviez", "avaient", "aurai", "auras", "aura", "aurons", "aurez", "auront",  "aurais", "aurais", "aurait", "avions", "aviez", "auraient", "aie", "aies", "ait", "ayons", "ayez", "aient", "n'est", "n'ai", "n'as", "n'a", "n'avons", "n'avez", "n'ont", "n'étais", "n'était", "n'étions", "n'étiez", "n'étaient", "n'aurai", "n'auras", "n'aura", "n'aurons", "n'aurez", "n'auront", "n'aurais", "n'aurais", "n'aurait", "n'avions", "n'aviez", "n'auraient", "n'aie", "n'aies", "n'ait", "n'ayons", "n'ayez", "n'aient")
 TERM_1_PERSON_PLURAL = ("ons", "sommes")
 TERM_2_PERSON_PLURAL = ("ez", "êtes")
@@ -37,7 +37,7 @@ ADJ_COMP = ("meilleur", "meilleure", "meilleurs", "meilleures", "pire", "pires",
 TERM_MASC = ('oir', 'age', 'gramme', 'scope', 'drome', 'er', 'phone', 'mètre', 'ment', 'isme', 'cide')
 TERM_FEM = ('manie', 'nomie', 'ine', 'erie', 'ssion', 'ure', 'ite', 'esse', 'logie', 'thérapie', 'tion', 'phobie', 'sion', 'ette', 'ie', 'té', 'ée', 'ence', 'ance')
 COMMON_MASC = ('article', 'ordre', 'homme', 'droit', 'citoyen', 'emploi', 'représentant')
-COMMON_FEM = ('raison', 'faculté')
+COMMON_FEM = ('raison', 'faculté', 'vertu')
 
 
 # Resources pronouns 
@@ -115,9 +115,10 @@ def verb(word:str, index:int) -> str:
     pattern = "V"
     word_before = corpus_grace[index-1][0]
     word_after = corpus_grace[index+1][0]
+    ref_word = word.lower()
 
     # Type
-    if word in AUXILIAIRES:
+    if ref_word in AUXILIAIRES:
         if corpus_grace[index+1][1] == "V" or corpus_grace[index+2][1] == "V":
             if word_after.endswith(TERM_PARTICIPE_PASSE) or corpus_grace[index+2][0].endswith(TERM_PARTICIPE_PASSE): 
                 pattern += "a"
@@ -127,70 +128,90 @@ def verb(word:str, index:int) -> str:
         pattern += "m"
 
     # Mood
-    # Infinitif
-    if word.endswith(TERM_INF):
+    if ref_word.endswith(TERM_INF):
         pattern += "n"
-    # Subjonctif
     # Regarde si la form conjuguée a un des terminaisons du subjonctif, si oui, on regarde si le mot qui précède est "qu'elle" ou "qu'il"
-    elif word.endswith(TERM_SUBJ) and (word_before == "qu'elle" or word_before == "qu'il"):
+    elif ref_word.endswith(TERM_SUBJ) and (word_before == "qu'elle" or word_before == "qu'il" or word_before == "qu'on"):
         pattern += "s"
-    # Participe
-    elif word.endswith(TERM_PARTICIPE_PRESENT):
+    elif ref_word.endswith(TERM_PARTICIPE_PRESENT):
         pattern+= "p"
-    elif word.endswith(TERM_PARTICIPE_PASSE) and (("Va" in corpus_grace[index-1][1] or "Va" in corpus_grace[index-2][1]) or word_after == "par"): 
+    elif ref_word.endswith(("é", "ée")) or (ref_word.endswith(TERM_PARTICIPE_PASSE) and (("Va" in corpus_grace[index-1][1] or "Va" in corpus_grace[index-2][1]) or word_after == "par")): 
         pattern += "p"
-    # Conditionnel 
-    elif word.endswith(TERM_CONDITIONNEL_PRESENT):
+    elif ref_word.endswith(TERM_CONDITIONNEL_PRESENT):
         pattern += "c"
-    # Spécifique pour la forme conjuguée "a" du verbe avoir qui est récurrente
-    elif word == "a":
+    elif ref_word == "a":
         pattern += "i"
     else:
-        pattern += "-"
+        pattern += "i"
 
     # Tense
-    if pattern[-1] == "p" and word.endswith(TERM_PARTICIPE_PRESENT):
-        pattern += "p"
-    elif pattern[-1] == "p" and word.endswith(TERM_PARTICIPE_PASSE):
-        pattern += "s"
-    elif word.endswith(TERM_FUTUR_S):
-        if pattern[-1] == "-":
-            pattern = pattern[:-1]
-            pattern += "if"
+    if not pattern[2] == "n":
+        if pattern[-1] == "p" and ref_word.endswith(TERM_PARTICIPE_PRESENT):
+            pattern += "p"
+        elif pattern[-1] == "p" and ref_word.endswith(TERM_PARTICIPE_PASSE):
+            pattern += "s"
+        elif ref_word.endswith(TERM_FUTUR):
+            if pattern[-1] == "-":
+                pattern = pattern[:-1]
+                pattern += "if"
+            else:
+                pattern+="f"
+        elif ref_word.endswith(TERM_CONDITIONNEL_PRESENT):
+            pattern+="p"
+        elif ref_word == "a":
+            pattern+="p"
         else:
-            pattern+="f"
+            pattern+="p"
     else:
         pattern+="-"
     
     # Person
-    if word.endswith(TERM_1_PERSON_PLURAL):
-        pattern+="1"
-    elif word.endswith(TERM_2_PERSON_PLURAL):
-        pattern+="2"
-    elif word.endswith(TERM_3_PERSON_PLURAL):
-        pattern+="3"
+    if pattern[2] == "i" or pattern[2] =="c" or pattern[2] == "s":
+        if ref_word.endswith(TERM_1_PERSON_PLURAL):
+            pattern+="1"
+        elif ref_word.endswith(TERM_2_PERSON_PLURAL):
+            pattern+="2"
+        elif ref_word.endswith(TERM_3_PERSON_PLURAL):
+            pattern+="3"
+        elif ref_word.endswith(("t", "d")):
+            pattern+="3"
+        elif ref_word == "a":
+            pattern+="3"
+        else:
+            pattern+="-"
     else:
         pattern+="-"
 
     # Number 
-    if word.endswith(TERM_1_PERSON_PLURAL) or word.endswith(TERM_2_PERSON_PLURAL) or word.endswith(TERM_3_PERSON_PLURAL):
-        pattern+="p"
-    elif pattern[2] == "p":
-        if word.endswith("s"):
+    if not (pattern[2] =="p" and pattern[3] == "p") and not pattern[2] == "n":
+        if ref_word.endswith(TERM_1_PERSON_PLURAL) or ref_word.endswith(TERM_2_PERSON_PLURAL) or ref_word.endswith(TERM_3_PERSON_PLURAL):
             pattern+="p"
-        else:
+        elif pattern[2] == "p":
+            if ref_word.endswith("s"):
+                pattern+="p"
+            else:
+                pattern+="s"
+        elif ref_word.endswith(("t", "d")):
             pattern+="s"
+        elif ref_word == "a":
+            pattern+="s"
+        else:
+            pattern+="-"
     else:
         pattern+="-"
 
     # Gender
-    if pattern[2] == "p":
-        if word.endswith("e") or word.endswith("es"):
-            pattern+="f"
+    if pattern[2] =="p" and pattern[3] == "s":
+        if pattern[2] == "p":
+            if ref_word.endswith("e") or ref_word.endswith("es"):
+                pattern+="f"
+            else:
+                pattern+="m"
         else:
-            pattern+="m"
+            pattern+="-"
     else:
         pattern+="-"
+
     return pattern
 
 def adjectives(word:str, index:int) ->str:
@@ -290,7 +311,7 @@ def adjectives(word:str, index:int) ->str:
 
 def noun(word:str, index:int, init_pattern:str) -> str:
     pattern = "N"
-    ref_word = word
+    ref_word = word.lower()
     pattern_before = ""
     if index != 0:
         pattern_before = get_pattern(corpus_grace[index-1][0], index-1)
