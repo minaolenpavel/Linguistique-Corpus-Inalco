@@ -10,6 +10,12 @@ def pattern_accuracy(pattern:str, ref_pattern:str) -> float:
     
     return precision
 
+def pattern_absolute_accuracy(pattern:str, ref_pattern:str) -> int:
+    if pattern == ref_pattern:
+        return 1
+    else:
+        return 0
+
 def import_corpus(path:str) -> list:
     corpus = []
     with open(path, "r", encoding='utf-8') as file:
@@ -52,6 +58,16 @@ def calculate_pattern_accuracy_per_category(ref_corpus:list, corpus:list) -> dic
         accuracy_per_category[key] = (sum(correct_per_cat[key])/len(correct_per_cat[key]))
     return accuracy_per_category
 
+def calculate_absolute_accuracy(ref_corpus:list, corpus:list) -> float:
+    all_results = []
+    for i, value in enumerate(corpus):
+        result = pattern_absolute_accuracy(value[1], ref_corpus[i][1])
+        all_results.append(result)
+    
+    total = len(all_results)
+    avg = (sum(all_results)/total)*100
+
+    return avg
 
 if __name__ == "__main__":
     ref_corpus = import_corpus("DDHC_REF.txt")
@@ -64,4 +80,7 @@ if __name__ == "__main__":
     accuracy_per_category = calculate_pattern_accuracy_per_category(ref_corpus, corpus)
     for key, value in accuracy_per_category.items():
         print(f"Les {key} ont une précision de {value:.4}%")
+
+    absolute_accuracy = calculate_absolute_accuracy(ref_corpus, corpus)
+    print(f"Précision absolue (Y/N) = {absolute_accuracy:.4}%")
 

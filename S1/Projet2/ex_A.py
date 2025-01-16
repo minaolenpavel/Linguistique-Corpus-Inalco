@@ -4,7 +4,7 @@ jar = r"C:\Users\M3500\AppData\Roaming\nltk_data\taggers\stanford-postagger-full
 model = r"C:\Users\M3500\AppData\Roaming\nltk_data\taggers\stanford-postagger-full-2020-11-17\models\french-ud.tagger"
 
 raw = []
-with open("S1\Projet2\ddhc.txt", mode='r', encoding='utf-8') as file:
+with open("DDHC.txt", mode='r', encoding='utf-8') as file:
     for line in file:
         raw.append(line.strip())
     file.close()
@@ -31,7 +31,7 @@ print(new_tokens)
 pos_tagger = nltk.tag.StanfordPOSTagger(model, jar, encoding = 'utf-8')
 tagged_text = pos_tagger.tag(new_tokens)
 
-with open("S1/Projet2/DDHC_A.txt", "w", encoding='utf-8') as file:
+with open("DDHC_A.txt", "w", encoding='utf-8') as file:
     for t in tagged_text:
         file.write(f"{t[0]} {t[1]}\n")
     file.close()

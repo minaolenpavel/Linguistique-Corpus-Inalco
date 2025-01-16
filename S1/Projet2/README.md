@@ -13,7 +13,7 @@ Après avoir réalisé l'étiquetage avec le postagger de Stanford, j'ai procéd
 Cela est passé non seulement par un grand travail de recherche afin de trouver les flexions qui appartiennent typiquement à un trait, par exemple, les verbes conjugués à la 3ème personne du pluriel finissent nécessairement en *-ent*. Ce premier travail a été fructueux, mais il laissait de côté le genre de la plupart des noms communs. J'ai alors procédé à l'implémentation d'une analyse syntaxique, par exemple, lorsque le script traite un nom qui ne répond à aucune des terminaisons communes du féminin ou du masculin, il regarde le genre grammatical du pronom qui le précède.
 Après avoir implémenté cette fonction, la quasi-totalité du travail était faite, il ne restait plus qu'à compléter avec certains mots récurrents qui ne laissaient pas d'indices syntaxiques ou morphologiques en les rentrant manuellement dans le programme.
 
-Après avoir procédé à une relecture de l'étiquetage de référence **DDHC_REF.txt**. J'ai écrit le programme **calcul.py** qui permet de calculer la précision du programme d'étiquetage en comparant pour chaque mot le pattern produit par le script **ex_B.py** ainsi que le contenu du corpus de référence. Une méthode de calcul prend la précision de chaque pattern et fait la moyenne, c'est sur cette méthode de calcul que la précision par catégorie est calculée. La seconde méthode de calcul, ne regarde que la catégorie grammaticale (N, V, D, etc.)
+Après avoir procédé à une relecture de l'étiquetage de référence **DDHC_REF.txt**. J'ai écrit le programme **calcul.py** qui permet de calculer la précision du programme d'étiquetage en comparant pour chaque mot le pattern produit par le script **ex_B.py** ainsi que le contenu du corpus de référence. Une méthode de calcul prend la précision de chaque pattern et fait la moyenne, c'est sur cette méthode de calcul que la précision par catégorie est calculée. La seconde méthode de calcul, ne regarde que la catégorie grammaticale (N, V, D, etc.). Puis enfin la *précision absolue* effectue le calcul de manière binaire, si c'est correct, c'est 1, sinon 0, puis la moyenne est faite.
 
 # Analyse des résultats et commentaires
 
@@ -29,6 +29,7 @@ Les A ont une précision de 91.8%
 Les F ont une précision de 100.0%
 Les R ont une précision de 100.0%
 Les P ont une précision de 97.78%
+Précision absolue (Y/N) = 78.94
 ~~~
 
 Le résultat de la comparaison des patterns est très précis, on voit que pour la catégorie des noms et des verbes, la précision est plus basse. Pour les noms cela est très certainement dû au fait que mon programme se contente d'une analyse syntaxique "superficielle" et ne regarde pas 2 mots en arrière par exemple, et ne regarde pas un mot en avant. Cette spécificité pourrait être corrigée et donner de meilleurs résultats pour cette catégorie. Pour la catégorie des verbes la précision pourrait elle aussi être améliorée, le programme d'étiqutage a été élaboré spécialement pour ce corpus et tend à étiqueter un verbe au présent de l'indicatif facilement. Avec un texte qui comporterait plus de variation de temps, la précision baisserait drastiquement.
