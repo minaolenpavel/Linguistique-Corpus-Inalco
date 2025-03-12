@@ -1,0 +1,17 @@
+marcherait	VCJ:sg
+marcheras	VCJ:sg
+marcherez	VCJ:pl
+marcheriez	VCJ:pl
+marcherions	VCJ:pl
+marcherons	VCJ:pl
+marcheront	VCJ:pl
+marches	SBC:pl	VCJ:sg
+marchez	VCJ:pl
+marché	SBC:sg	ADJ2PAR:sg	ADJ1PAR:sg	VPAR:sg
+marchée	ADJ2PAR:sg	ADJ1PAR:sg	VPAR:sg
+marchées	ADJ2PAR:pl	ADJ1PAR:pl	VPAR:pl
+marchés	SBC:pl	ADJ2PAR:pl	ADJ1PAR:pl	VPAR:pl
+marchèrent	VCJ:pl
+marchiez	VCJ:pl
+marchions	VCJ:pl
+marchons	VCJ:pl
