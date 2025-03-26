@@ -1,44 +1,5 @@
-from unidecode import unidecode
-
-def normalize(mot:str) -> str:
-    return unidecode(mot).lower()
-
-def state_trans(current_state:str, mot:str) -> str:
-    if mot == "":
-        return "B"
-    mot = normalize(mot)
-
-    if current_state == "S":
-        if mot == "le":
-            return "D"
-        else:
-            return "B"
-    elif current_state == "D":
-        if mot == "petit":
-            return "D"
-        elif mot == "chateau":
-            return "E"
-        else:
-            return "B"
-    return "B"
-
-current_state = "S"
-text = input("Entrez une phrase : ")
-mots = text.split()
-for i, mot in enumerate(mots):
-    print(mot)
-    print(current_state)
-    current_state = state_trans(current_state, mot)
-    print(current_state)
-    #breakpoint()
-    if current_state == "E":
-        print("c'est fini !")
-        break
-    elif current_state == "B":
-        print("bloqué !")
-        break
-    elif current_state != "E" and i+1 == len(mots):
-        print("bloqué")
-        break
-
-
+alphabet_lexique = ['l', 'e', ' ', 'p', 't', 'i', 'c', 'h', 'a', 'b', 'o', 'd', 'u', 'f', 'r']
+etat_initial = 'etat_0'
+etats_finaux = ['etat_26', 'etat_38']
+les_etats = ['etat_0', 'etat_1', 'etat_2', 'etat_3', 'etat_4', 'etat_5', 'etat_6', 'etat_7', 'etat_8', 'etat_9', 'etat_10', 'etat_11', 'etat_12', 'etat_13', 'etat_14', 'etat_15', 'etat_16', 'etat_17', 'etat_18', 'etat_19', 'etat_20', 'etat_21', 'etat_22', 'etat_23', 'etat_24', 'etat_25', 'etat_26', 'etat_27', 'etat_28', 'etat_29', 'etat_30', 'etat_31', 'etat_32', 'etat_33', 'etat_34', 'etat_35', 'etat_36', 'etat_37', 'etat_38']
+les_transitions = {'etat_0': {'l': 'etat_1'}, 'etat_1': {'e': 'etat_2'}, 'etat_2': {' ': 'etat_3'}, 'etat_3': {'p': 'etat_4', 'c': 'etat_27'}, 'etat_4': {'e': 'etat_5'}, 'etat_5': {'t': 'etat_6'}, 'etat_6': {'i': 'etat_7'}, 'etat_7': {'t': 'etat_8'}, 'etat_8': {' ': 'etat_9'}, 'etat_9': {'c': 'etat_10'}, 'etat_10': {'h': 'etat_11'}, 'etat_11': {'a': 'etat_12'}, 'etat_12': {'t': 'etat_13'}, 'etat_13': {' ': 'etat_14'}, 'etat_14': {'b': 'etat_15'}, 'etat_15': {'o': 'etat_16'}, 'etat_16': {'i': 'etat_17'}, 'etat_17': {'t': 'etat_18'}, 'etat_18': {' ': 'etat_19'}, 'etat_19': {'d': 'etat_20'}, 'etat_20': {'u': 'etat_21'}, 'etat_21': {' ': 'etat_22'}, 'etat_22': {'l': 'etat_23'}, 'etat_23': {'a': 'etat_24'}, 'etat_24': {'i': 'etat_25'}, 'etat_25': {'t': 'etat_26'}, 'etat_27': {'h': 'etat_28'}, 'etat_28': {'a': 'etat_29'}, 'etat_29': {'t': 'etat_30'}, 'etat_30': {'e': 'etat_31'}, 'etat_31': {'a': 'etat_32'}, 'etat_32': {'u': 'etat_33'}, 'etat_33': {' ': 'etat_34'}, 'etat_34': {'f': 'etat_35'}, 'etat_35': {'o': 'etat_36'}, 'etat_36': {'r': 'etat_37'}, 'etat_37': {'t': 'etat_38'}}
