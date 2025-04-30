@@ -24,19 +24,14 @@ etat_initial = gnom.nom_etat()
 etats_finaux = [ ]
 les_etats = [ etat_initial ]
 les_transitions = { }
+
 #----- la boucle  d'analyse du message par l'automate (le "moteur" de l'automate)
 erreur = False
 etat_courant = etat_initial
 
-# (2) A FAIRE AJOUTER ICI LA BOUCLE ENGLOBANT LA BOUCLE FOR CI-DESSOUS AFIN DE LIRE PLUSIEURS LIGNES 
-# (3) A FAIRE AJOUTER UN APPEL A LA FONCTION DE LECTURE ICI ET RANGER LE RESULTAT DANS liste_caracteres
-# (4) A FAIRE AJOUTER ICI UN TEST POUR SAVOIR SI LE MOT "STOP" a été entré,
-#     si oui break sinon on continu les itérations de la nouvelle boucle
-
 phrase = prompt("veuillez entrer une phrase : ")
 while phrase != "STOP":
      liste_caracteres = lire( phrase )
-
      for i in range( 0, len( liste_caracteres )):  
           token_lu = liste_caracteres[ i ]
           if token_lu not in alphabet_lexique:
