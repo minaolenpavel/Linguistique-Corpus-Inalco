@@ -29,7 +29,7 @@ etats_finaux = ['etat_f']
 etats = ['etat_i', 'etat_1', 'etat_2', 'etat_3', 'etat_f']
 transitions = {'etat_i': {'C': 'etat_1', 'V':'etat_2'}, 'etat_1':{'V':'etat_2', 'C':'etat_3'}, 'etat_2':{'C': 'etat_3', 'V': 'etat_2'}, 'etat_3':{'#': 'etat_f', 'V': 'etat_i', 'C': 'etat_i'}}
 
-msg = "programmation"
+msg = "eclectique"
 
 pair = combine_map_word(msg)
 etat_courant = etat_initial
