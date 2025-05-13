@@ -74,11 +74,17 @@ def syllabation(word:list):
                 pass
             elif etat_courant in ["etat_1", "etat_2"]:
                 syllable.append(char)
-            elif etat_prev == "etat_3" and etat_courant =="etat_i":
-                if syllable:
-                    mot_syll.append(list(syllable))
-                syllable = [char]
-                # FINIR ETAT 3 PROBLEMATIQUE
+            elif etat_prev == "etat_3" and etat_courant == "etat_i":
+                syllable.append(char)  # add the vowel
+                mot_syll.append(list(syllable))  # store completed syllable
+                syllable.clear()  # start a new one
+            elif etat_courant == "etat_3":
+                mot_syll.append(list(syllable))
+                syllable.clear()
+                syllable.append(char)
+    if syllable:
+        mot_syll.append(list(syllable))
+        syllable.clear()
     print(mot_syll)
     print(syllable)
 
@@ -86,7 +92,7 @@ def syllabation(word:list):
 
 
 
-msg = "philosophie"
+msg = "eclectique"
 
 msg = couple_cons(msg)
 syllabation(msg)

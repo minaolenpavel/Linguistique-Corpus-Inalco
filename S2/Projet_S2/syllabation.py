@@ -66,4 +66,4 @@ class Syllabifier:
 
 if __name__ == "__main__":
     syllaby = Syllabifier()
-    print(syllaby.syllabify("eclectique"))
+    print(syllaby.syllabify("manger"))
