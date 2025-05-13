@@ -92,7 +92,7 @@ def syllabation(word:list):
 
 
 
-msg = "eclectique"
+msg ="tard"
 
 msg = couple_cons(msg)
 syllabation(msg)
