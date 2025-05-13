@@ -12,6 +12,9 @@ def vowel_or_cons(char:str) -> str:
     elif re.match(re_end, char):
         return "#"
 
+def remove_empty_sublists(liste:list) -> list:
+    return [x for x in liste if x]
+
 def map_word(word:str) -> str:
     mapped_word = ""
     for char in word:
@@ -24,7 +27,6 @@ def map_char(char:list) -> str:
         return [vowel_or_cons(char)]
     else:
         return [vowel_or_cons(x) for x in char]
-
 
 def combine_map_word(word:str) -> tuple:
     mapped_word = map_word(word)
@@ -39,6 +41,9 @@ def couple_cons(text:str):
         if vowel_or_cons(char) == "C":
             cons.append(char)
             if i+1 < len(text):
+                if (char.lower() == "n" or char.lower() =="m") and vowel_or_cons(text[i-1]) == "V" :
+                    word.append(list(cons))
+                    cons.clear()
                 if vowel_or_cons(text[i+1]) == "V":
                     word.append(list(cons))
                     cons.clear()
@@ -56,6 +61,7 @@ def couple_cons(text:str):
     return ["".join(x) for x in word if x != []]
 
 def syllabation(word:list):
+    print(word)
     etat_initial = 'etat_i'
     etat_final = 'etat_f'
     etats = ['etat_i', 'etat_1', 'etat_2', 'etat_3', 'etat_f']
@@ -64,35 +70,63 @@ def syllabation(word:list):
     etat_courant = etat_initial
     mot_syll = []
     syllable = []
-    for char in word:
+    i = 0
+    char = word[i]
+    while i < len(word):
         mapped_char = vowel_or_cons(char)
         if mapped_char in transitions[etat_courant].keys():
             print(f"{etat_courant} {char} {mapped_char} {transitions[etat_courant][mapped_char]}")
+            print(syllable)
+            print(mot_syll)
             etat_prev = etat_courant
             etat_courant = transitions[etat_courant][mapped_char]
             if etat_courant == etat_final:
                 pass
-            elif etat_courant in ["etat_1", "etat_2"]:
+            elif etat_courant == "etat_1":
                 syllable.append(char)
+            elif etat_courant == "etat_2":
+                if i+1 < len(word):
+                    if (word[i+1].lower() == "m" or word[i+1].lower() == "n") and vowel_or_cons(word[i+2]) == "C":
+                        syllable.append(word[i])
+                        syllable.append(word[i+1])
+                        mot_syll.append(list(syllable))
+                        syllable.clear()
+                        i+=1
+                    else:
+                        syllable.append(char)
+                else:
+                    syllable.append(char)
             elif etat_prev == "etat_3" and etat_courant == "etat_i":
-                syllable.append(char)  # add the vowel
-                mot_syll.append(list(syllable))  # store completed syllable
-                syllable.clear()  # start a new one
+                syllable.append(char)
+                mot_syll.append(list(syllable))  
+                syllable.clear()
             elif etat_courant == "etat_3":
                 mot_syll.append(list(syllable))
                 syllable.clear()
                 syllable.append(char)
+            i+=1
+        if i < len(word):
+            char = word[i]
+        else:
+            break
+        
     if syllable:
         mot_syll.append(list(syllable))
         syllable.clear()
-    print(mot_syll)
     print(syllable)
+    mot_syll = remove_empty_sublists(mot_syll)
+    if len(mot_syll[-1]) == 1:
+        mot_syll[-2].extend(mot_syll.pop())
+    print(mot_syll)
 
 
 
 
-
-msg ="monogamie"
+msg ="champagne"
 
 msg = couple_cons(msg)
 syllabation(msg)
+
+
+
+
