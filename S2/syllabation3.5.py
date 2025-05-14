@@ -15,24 +15,7 @@ def vowel_or_cons(char:str) -> str:
 def remove_empty_sublists(liste:list) -> list:
     return [x for x in liste if x]
 
-def map_word(word:str) -> str:
-    mapped_word = ""
-    for char in word:
-        mapped_word += vowel_or_cons(char)
-    mapped_word += "#"
-    return mapped_word
-
-def map_char(char:list) -> str:
-    if len(char) == 1:
-        return [vowel_or_cons(char)]
-    else:
-        return [vowel_or_cons(x) for x in char]
-
-def combine_map_word(word:str) -> tuple:
-    mapped_word = map_word(word)
-    return (word, mapped_word)
-
-def couple_cons(text:str):
+def couple_letters(text:str):
     text = list(text)
     word = []
     cons = []
@@ -76,8 +59,7 @@ def syllabation(word:list):
         mapped_char = vowel_or_cons(char)
         if mapped_char in transitions[etat_courant].keys():
             print(f"{etat_courant} {char} {mapped_char} {transitions[etat_courant][mapped_char]}")
-            print(syllable)
-            print(mot_syll)
+
             etat_prev = etat_courant
             etat_courant = transitions[etat_courant][mapped_char]
             if etat_courant == etat_final:
@@ -85,7 +67,7 @@ def syllabation(word:list):
             elif etat_courant == "etat_1":
                 syllable.append(char)
             elif etat_courant == "etat_2":
-                if i+1 < len(word):
+                if i+2 < len(word):
                     if (word[i+1].lower() == "m" or word[i+1].lower() == "n") and vowel_or_cons(word[i+2]) == "C":
                         syllable.append(word[i])
                         syllable.append(word[i+1])
@@ -122,9 +104,9 @@ def syllabation(word:list):
 
 
 
-msg ="champagne"
+msg ="cigarette"
 
-msg = couple_cons(msg)
+msg = couple_letters(msg)
 syllabation(msg)
 
 
