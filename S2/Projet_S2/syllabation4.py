@@ -55,6 +55,15 @@ class Syllaber:
             word.append(list(vows))
         return ["".join(x) for x in word if x != []]
 
+    def syll_to_str(self, mot_syll:list) -> str:
+        return " ".join(["".join(x) for x in mot_syll]) 
+
+    def merge_if_orphan(self, mot_syll:list) -> list:
+        if len(mot_syll) > 1:
+            if len(mot_syll[-1]) == 1:
+                mot_syll[-2].extend(mot_syll.pop())
+        return mot_syll
+
     def syllabation(self, word:list):
         #print(word)
         etat_courant = self.etat_initial
@@ -106,8 +115,7 @@ class Syllaber:
             syllable.clear()
         #print(syllable)
         mot_syll = self.remove_empty_sublists(mot_syll)
-        if len(mot_syll[-1]) == 1:
-            mot_syll[-2].extend(mot_syll.pop())
+        mot_syll = self.merge_if_orphan(mot_syll)
         #print(mot_syll)
         return mot_syll
 
@@ -115,7 +123,16 @@ class Syllaber:
 
 if __name__ =="__main__":
     text = process_xml.extract_text("Projet_S2/transcript.xml")
-    print(text)
+    syllabateur = Syllaber()
+    for i in text:
+        if not (i.startswith("<") and i.endswith("/>")):
+            mots = i.split()
+            for m in mots:
+                mot_syll = syllabateur.syllabation(m)
+                print(syllabateur.syll_to_str(mot_syll), end=" ")
+            print("\n")
+        else:
+            print(i)
     
 
 
