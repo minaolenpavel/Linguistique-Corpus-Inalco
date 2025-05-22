@@ -7,8 +7,10 @@ class Syllaber:
         self.etats = ['etat_i', 'etat_1', 'etat_2', 'etat_3', 'etat_f']
         self.transitions = {'etat_i': {'C': 'etat_1', 'V':'etat_2'}, 'etat_1':{'V':'etat_2', 'C':'etat_1'}, 'etat_2':{'C': 'etat_3', 'V': 'etat_2'}, 'etat_3':{'#': 'etat_f', 'V': 'etat_i', 'C': 'etat_i'}}
 
-
     def vowel_or_cons(self, char: str) -> str:
+        """
+        Détermine si le caractère est une voyelle, une consonne ou autre chose.
+        """
         char = char.lower()
         re_vowels = r'[aeiouyàâäéèêëîïôöùûüÿ]'
         re_cons = r'[b-df-hj-np-tv-zç]'
@@ -25,9 +27,15 @@ class Syllaber:
 
 
     def remove_empty_sublists(self, liste:list) -> list:
+        """
+        Efface les listes vides au sein d'une liste
+        """
         return [x for x in liste if x]
 
     def couple_letters(self, text:str):
+        """
+        Travail de pré-traitement pour combiner les consonnes et les voyelles ensembles.
+        """
         text = list(text)
         word = []
         cons = []
@@ -36,6 +44,7 @@ class Syllaber:
             if self.vowel_or_cons(char) == "C":
                 cons.append(char)
                 if i+1 < len(text):
+                    # Prise en compte des sons nasaux
                     if (char.lower() == "n" or char.lower() =="m") and self.vowel_or_cons(text[i-1]) == "V" :
                         word.append(list(cons))
                         cons.clear()
@@ -50,21 +59,32 @@ class Syllaber:
                         vows.clear()
             else:
                 continue
+        # Repêche les consonnes et les voyelles orphelines
         if len(cons) > 0 or len(vows) > 0:
             word.append(list(cons))
             word.append(list(vows))
         return ["".join(x) for x in word if x != []]
 
     def syll_to_str(self, mot_syll:list) -> str:
+        """
+        Transforme les listes de syllabes en chaînes de caractères.
+        """
         return " ".join(["".join(x) for x in mot_syll]) 
 
     def merge_if_orphan(self, mot_syll:list) -> list:
+        """
+        Repêche les lettres orphelines.
+        """
         if len(mot_syll) > 1:
+            # Prend en compte la taille totale du mot pour éviter de concatener les mots comme "à"
             if len(mot_syll[-1]) == 1:
                 mot_syll[-2].extend(mot_syll.pop())
         return mot_syll
 
     def syllabation(self, word:list):
+        """
+        Fonction principale qui découpe les mots en syllabes.
+        """
         #print(word)
         etat_courant = self.etat_initial
         mot_syll = []
@@ -102,6 +122,7 @@ class Syllaber:
                     syllable.clear()
                     syllable.append(char)
                 i+=1
+            # Prend en compte les caractères diacritiques comme les apostrophes et la ponctuation
             elif mapped_char == 'X':
                 #breakpoint()
                 syllable.append(char)
