@@ -50,7 +50,7 @@ class Syllabifier:
                 elif etat_courant in ['etat_1', 'etat_2', 'etat_3']:
                     syllable.append(letter)
                 elif etat_prev == 'etat_3' and etat_courant == 'etat_i':
-                    mot_syll.append(list(syllable)) # Conversion en liste pour faire une copie
+                    mot_syll.append(list(syllable))
                     syllable.clear()
                     syllable.append(letter)
             else:

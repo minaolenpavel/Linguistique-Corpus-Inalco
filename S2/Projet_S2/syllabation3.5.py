@@ -59,7 +59,6 @@ def syllabation(word:list):
         mapped_char = vowel_or_cons(char)
         if mapped_char in transitions[etat_courant].keys():
             print(f"{etat_courant} {char} {mapped_char} {transitions[etat_courant][mapped_char]}")
-
             etat_prev = etat_courant
             etat_courant = transitions[etat_courant][mapped_char]
             if etat_courant == etat_final:
@@ -104,7 +103,7 @@ def syllabation(word:list):
 
 
 
-msg ="cigarette"
+msg ="excellent"
 
 msg = couple_letters(msg)
 syllabation(msg)
