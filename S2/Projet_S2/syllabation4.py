@@ -20,6 +20,8 @@ class Syllaber:
             return "C"
         elif re.match(re_end, char):
             return "#"
+        else:
+            return "X"
 
 
     def remove_empty_sublists(self, liste:list) -> list:
@@ -91,6 +93,10 @@ class Syllaber:
                     syllable.clear()
                     syllable.append(char)
                 i+=1
+            elif mapped_char == 'X':
+                #breakpoint()
+                syllable.append(char)
+                i+=1
             if i < len(word):
                 char = word[i]
             else:
@@ -110,7 +116,7 @@ class Syllaber:
 if __name__ =="__main__":
     msg ="excellent"
     syllaber = Syllaber()
-    msg = "votre excellence monsieur l'ambassadeur"
+    msg = "une voiture de police"
     msg = msg.split()
     print(msg)
     for i in msg:
