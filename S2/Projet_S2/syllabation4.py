@@ -1,4 +1,4 @@
-import re
+import re, process_xml
 
 class Syllaber:
     def __init__(self):
@@ -114,13 +114,8 @@ class Syllaber:
 
 
 if __name__ =="__main__":
-    msg ="excellent"
-    syllaber = Syllaber()
-    msg = "une voiture de police"
-    msg = msg.split()
-    print(msg)
-    for i in msg:
-        print(syllaber.syllabation(i))
+    text = process_xml.extract_text("Projet_S2/transcript.xml")
+    print(text)
     
 
 
